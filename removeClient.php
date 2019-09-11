@@ -1,7 +1,7 @@
 <?php
 require "Client.php";
 $db = new Client();
-//$id = $_POST['id'];
-$id = 5;
+$id = $_POST['id'];
+
 $db->removeClient($id);
 ?>

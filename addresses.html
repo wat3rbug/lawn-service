@@ -10,7 +10,7 @@
 	<script src="jquery-3.3.1.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="sidebar.js"></script>
-	<script src="clients.js"></script>
+	<script src="addresses.js"></script>
 	
 	<div class="col-sm-12">
 		<div class="jumbotron info">
@@ -26,18 +26,18 @@
 		
 		</div>
 		<div class="col-sm-9">
-			<p><h4>Client Section</h4></p>
+			<p><h4>Address Section</h4></p>
 			
-			<button type="button" class="btn btn-success" id="addClientBtn"><span class="glyphicon glyphicon-plus"></span>&nbsp;Add Client</button>
+			<button type="button" class="btn btn-success" id="addAddressBtn"><span class="glyphicon glyphicon-plus"></span>&nbsp;Add Address</button>
 			<div class="row">&nbsp;</div>
 			<div class="panel panel-info">
 				<div class="panel-body">
-					<table class="table tabel-striped" id="clients">
+					<table class="table tabel-striped" id="addresses">
 						<thead class="thead-dark">
-							<th scope="col">First Name</th>
-							<th scope="col">Last Name</th>
-							<th scope="col">Phone</th>
-							<th scope="col">Email</th>
+							<th scope="col">Street</th>
+							<th scope="col">City</th>
+							<th scope="col">State</th>
+							<th scope="col">Zip Code</th>
 							<th scope="col">Action</th>
 						</th>
 						<tbody></tbody>
@@ -48,9 +48,9 @@
 	</div>
 </body>
 
-<!-- Remove Client Section -->
+<!-- Remove Address Section -->
 
-<div class="modal" id="successRemoveClient" tabindex="-1" role="dialog">
+<div class="modal" id="successRemoveAddress" tabindex="-1" role="dialog">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header d-block alert-success">
@@ -58,8 +58,8 @@
 			</div>
 			<div class="modal-body">
 				<div class="row">
-					<input type="hidden" id="rmClientId">
-					<div class="col-sm-12" id="rmClientMsg"></div>
+					<input type="hidden" id="rmAddressId">
+					<div class="col-sm-12" id="rmAddressMsg"></div>
 				</div>
 			</div>
 			<div class="modal-footer text-right">
@@ -71,41 +71,46 @@
 	</div>
 </div>
 
-<!-- Edit Client Section -->
+<!-- Edit Address Section -->
 
-<div class="modal fade" id="editClientModal" tabindex="-1" role="dialog">
+<div class="modal fade" id="editAddressModal" tabindex="-1" role="dialog">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header d-block alert-warning">
-				<h5 class="modal-title text-center">Edit Client</h5>
+				<h5 class="modal-title text-center">Edit Address</h5>
 			</div>
 			<div class="modal-body">
 				
 				<div class="row">
-					<div class="col-sm-6 text-right"><input type="hidden" id="editClientId">First Name</div>
-					<div class="col-sm-6"><input id="editFirstName"></div>
+					<div class="col-sm-6 text-right"><input type="hidden" id="editAddressId">Address</div>
+					<div class="col-sm-6"><input id="editAddress1"></div>
 				</div>
 				<div class="row">&nbsp;</div>
 				<div class="row">
-					<div class="col-sm-6 text-right">Last Name</div>
-					<div class="col-sm-6"><input id="editLastName"></div>
+					<div class="col-sm-6 text-right">Address2</div>
+					<div class="col-sm-6"><input id="editAddress2"></div>
 				</div>
 				<div class="row">&nbsp;</div>
 				<div class="row">
-					<div class="col-sm-6 text-right">Phone</div>
-					<div class="col-sm-6"><input id="editPhone"></div>
+					<div class="col-sm-6 text-right">City</div>
+					<div class="col-sm-6"><input id="editCity"></div>
 				</div>
 				<div class="row">&nbsp;</div>
 				<div class="row">
-					<div class="col-sm-6 text-right">Email</div>
-					<div class="col-sm-6"><input id="editEmail"></div>
+					<div class="col-sm-6 text-right">State</div>
+					<div class="col-sm-6"><input id="editState"></div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<div class="col-sm-6 text-right">Zip Code</div>
+					<div class="col-sm-6"><input id="editZipCode"></div>
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-warning" id="pushClientDBEdit">
+				<button type="button" class="btn btn-warning" id="pushAddressDBEdit">
 					<span class="glyphicon glyphicon-cloud-upload"></span>&nbsp;Update
 				</button>&nbsp;
-				<button type="button" class="btn btn-default" id="cancelClientEditBtn">
+				<button type="button" class="btn btn-default" id="cancelAddressEditBtn">
 					<span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Cancel
 				</button>
 			</div>
@@ -113,40 +118,45 @@
 	</div>
 </div>
 
- <!-- Add Client Section -->
+ <!-- Add Address Section -->
 
-<div class="modal" id="addClient" tabindex="-1" role="dialog">
+<div class="modal" id="addAddress" tabindex="-1" role="dialog">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header d-block alert-info">
-				<h5 class="modal-title text-center">Add Client</h5>
+				<h5 class="modal-title text-center">Add Address</h5>
 			</div>
 			<div class="modal-body">
 				<div class="row">
-					<div class="col-sm-6 text-right">First Name</div>
-					<div class="col-sm-6"><input id="firstName"></div>
+					<div class="col-sm-6 text-right">Address</div>
+					<div class="col-sm-6"><input id="Address1"></div>
 				</div>
 				<div class="row">&nbsp;</div>
 				<div class="row">
-					<div class="col-sm-6 text-right">Last Name</div>
-					<div class="col-sm-6"><input id="lastName"></div>
+					<div class="col-sm-6 text-right">Address2</div>
+					<div class="col-sm-6"><input id="Address2"></div>
 				</div>
 				<div class="row">&nbsp;</div>
 				<div class="row">
-					<div class="col-sm-6 text-right">Phone</div>
-					<div class="col-sm-6"><input id="phone"></div>
+					<div class="col-sm-6 text-right">City</div>
+					<div class="col-sm-6"><input id="city"></div>
 				</div>
 				<div class="row">&nbsp;</div>
 				<div class="row">
-					<div class="col-sm-6 text-right">Email</div>
-					<div class="col-sm-6"><input id="email"></div>
+					<div class="col-sm-6 text-right">State</div>
+					<div class="col-sm-6"><input id="state"></div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<div class="col-sm-6 text-right">Zip Code</div>
+					<div class="col-sm-6"><input id="zipCode"></div>
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-success" id="pushClientDB">
+				<button type="button" class="btn btn-success" id="pushAddressDB">
 					<span class="glyphicon glyphicon-cloud-upload"></span>&nbsp;Complete
 				</button>&nbsp;
-				<button type="button" class="btn btn-default" id="cancelClientBtn">
+				<button type="button" class="btn btn-default" id="cancelAddressBtn">
 					<span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Cancel
 				</button>
 			</div>
@@ -154,7 +164,7 @@
 	</div>
 </div>
 
-<div class="modal" id="successAddClient" tabindex="-1" role="dialog">
+<div class="modal" id="successAddAddress" tabindex="-1" role="dialog">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header d-block success">
@@ -162,7 +172,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="row">
-					<div class="col-sm-12" id="addClientMsg"></div>
+					<div class="col-sm-12" id="addAddressMsg"></div>
 				</div>
 			</div>
 			<div class="modal-footer text-right">

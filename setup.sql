@@ -11,7 +11,8 @@ create table addresses (
 	address2 varchar(40),
 	city varchar(40) not null,
 	state varchar(40) not null,
-	zipcode varchar(40) not null	
+	zipcode varchar(40) not null,
+	deleted tinyint(1) not null default 0	
 );
 
 create table clients (
