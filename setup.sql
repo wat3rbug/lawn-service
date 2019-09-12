@@ -18,16 +18,20 @@ create table addresses (
 create table clients (
 	id int auto_increment primary key,
 	firstname varchar(30) not null,
-	lastname varchar(30) not null default "unknown",
+	lastname varchar(30),
 	phone varchar(14) not null,
 	email varchar(40),
-	deleted tinyint(1) not null default 0
+	deleted tinyint(1) not null default 0,
+	billing int not null default 0
 );
 
 create table types (
 	id int auto_increment primary key,
 	type varchar(20) not null
 );
+insert into types (type) values ("mow");
+insert into types (type) values ("mulch");
+insert into types (type) values ("landscape");
 
 create table jobs
 (

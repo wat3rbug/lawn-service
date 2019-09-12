@@ -38,7 +38,33 @@ function editClient(id) {
 	});
 }
 
+function loadAddresses() {
+	$.ajax({
+		url: "getAllAddresses.php",
+		type: "get",
+		datatype: "json",
+		success: function(data) {
+			if (data != null) {
+				$('#addressEditSelector').empty();
+				$('#addAddressSelector').empty();
+				data.forEach(function(address) {
+					var message = address.address1;
+					if (address.address2 != null) message += " " + address.address2;
+					message += " " + address.city + ", " + address.state;
+					message += " " + address.zipcode; 
+					$('#addressEditSelector').append($('<option>').text(message).val(address.id));
+					$('#addAddressSelector').append($('<option>').text(message).val(address.id));
+				});
+			}
+		}	
+	});
+}
+
 $(document).ready(function() {
+	
+	// load addresses ahead of time
+	
+	loadAddresses();
 
 	// client modal buttons
 	

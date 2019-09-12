@@ -107,7 +107,7 @@ $(document).ready(function() {
 		})
 	});
 	
-	// setup table of clients
+	// setup table of address
 	
 	$.ajax({
 	

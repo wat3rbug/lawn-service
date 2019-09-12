@@ -46,14 +46,15 @@ class Client {
 		}
 		return $output;
 	}
-	function editClient($id, $firstname, $lastname, $phone, $email) {
-		$sql = "UPDATE clients set firstname =?, lastname = ?, phone = ?, email = ? where id = ?";
+	function editClient($id, $firstname, $lastname, $phone, $email, $billing) {
+		$sql = "UPDATE clients set firstname =?, lastname = ?, phone = ?, email = ?, billing = ? where id = ?";
 		$statement = $this->conn->prepare($sql);
 		$statement->bindParam(1, $firstname);
 		$statement->bindParam(2, $lastname);
 		$statement->bindParam(3, $phone);
 		$statement->bindParam(4, $email);
-		$statement->bindParam(5, $id);
+		$statement->bindParam(5, $billing);
+		$statement->bindParam(6, $id);
 		$statement->execute();	
 	}
 	
@@ -66,13 +67,14 @@ class Client {
 		return $output;
 	}
 	
-	function addClient($firstname, $lastname, $phone, $email) {
-		$sql = "INSERT INTO clients (firstname, lastname, phone, email) VALUES (?, ?, ?, ?)";
+	function addClient($firstname, $lastname, $phone, $email, $billing) {
+		$sql = "INSERT INTO clients (firstname, lastname, phone, email, billing) VALUES (?, ?, ?, ?, ?)";
 		$statement = $this->conn->prepare($sql);
 		$statement->bindParam(1, $firstname);
 		$statement->bindParam(2, $lastname);
 		$statement->bindParam(3, $phone);
 		$statement->bindParam(4, $email);
+		$statement->bindParam(5, $billing);
 		$statement->execute();
 	}
 }
