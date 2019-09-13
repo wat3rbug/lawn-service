@@ -131,23 +131,24 @@ $(document).ready(function() {
 	
 	// setup table of clients
 	
-	$.ajax({
-	
+	$.ajax({	
 		url: "getAllClients.php",
 		dataType: "json",
 		type: "get",
 		success: function(data) {
-			data.forEach(function(client) {
-				var message = "<tr><td>" + client.firstName + "</td><td>" + client.lastName + "</td><td>";
- 				message += client.phone + "</td><td>" + client.email + "</td><td>";
- 				message += "<button type='button' class='btn btn-outline-warning' id='editClient' ";
-				message += "onclick='editClient(" + client.id +")' data-toggle='tooltip' title='Edit client information'>";
-				message += "<span class='glyphicon glyphicon-pencil'></span></button>&nbsp;<button type='button'";
-				message += " class='btn btn-outline-danger' id='removeClient' data-toggle='tooltip' title='Remove client'";
-				message += " onclick='removeClient(" + client.id + ")'><span class='glyphicon glyphicon-remove'></span>";
-				message += "</td></tr>\n";
- 				$('#clients tr:last').after(message);
-			});
+			if (data != null) {
+				data.forEach(function(client) {
+					var message = "<tr><td>" + client.firstName + "</td><td>" + client.lastName + "</td><td>";
+	 				message += client.phone + "</td><td>" + client.email + "</td><td>";
+	 				message += "<button type='button' class='btn btn-outline-warning' id='editClient' ";
+					message += "onclick='editClient(" + client.id +")' data-toggle='tooltip' title='Edit client information'>";
+					message += "<span class='glyphicon glyphicon-pencil'></span></button>&nbsp;<button type='button'";
+					message += " class='btn btn-outline-danger' id='removeClient' data-toggle='tooltip' title='Remove client'";
+					message += " onclick='removeClient(" + client.id + ")'><span class='glyphicon glyphicon-remove'></span>";
+					message += "</td></tr>\n";
+	 				$('#clients tr:last').after(message);
+				});
+			}		
 		}
 	});
 	

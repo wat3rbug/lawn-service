@@ -44,20 +44,21 @@ $(document).ready(function() {
 	// client modal buttons
 	
 	$('#addAddressBtn').on("click", function() {
-		$('#addAddress').modal('show');
+		$('#addAddressModal').modal('show');
 	});
 	
 	$('#cancelAddressBtn').on("click", function() {
-		$('#addAddress').modal('hide');
+		$('#addAddressModal').modal('hide');
 	});
 	
 	$('#addSuccessBtn').on("click", function() {
 		$('#successAddAddress').modal('hide');
+		window.parent.window.location.reload();
 	});
 	
 	$('#cancelAddressEditBtn').on("click", function() {
 		$('#editAddressModal').modal('hide');
-		$('#editAddress').val();
+		$('#editAddress1').val();
 		$('#editAddress2').val();
 		$('#editCity').val();
 		$('#editAddressId').val();
@@ -67,13 +68,13 @@ $(document).ready(function() {
 	
 	$('#pushAddressDBEdit').on("click", function() {
 		var id = $('#editAddressId').val();
-		var address1 = $('#editAddress').val();
+		var address1 = $('#editAddress1').val();
 		var address2 = $('#editAddress2').val();
 		var city = $('#editCity').val();
 		var state = $('#editState').val();
 		var zipcode = $('#editZipCode').val();
 		$.ajax({
-			url: "editClient.php",
+			url: "editAddress.php",
 			type: "post",
 			data: {
 				"id": id,
@@ -117,7 +118,9 @@ $(document).ready(function() {
 		success: function(data) {
 			if (data != null) {
 				data.forEach(function(address) {
-					var message = "<tr><td>" + address.address1 + " " + address.address2 + "</td><td>" + address.city + "</td><td>";
+					var message = "<tr><td>" + address.address1 + " ";
+					if (address.address2 != null) message+= address.address2;
+					message += "</td><td>" + address.city + "</td><td>";
 	 				message += address.state + "</td><td>" + address.zipcode + "</td><td>";
 	 				message += "<button type='button' class='btn btn-outline-warning' id='editAddress' ";
 					message += "onclick='editAddress(" + address.id +")' data-toggle='tooltip' title='Edit Address information'>";
@@ -151,8 +154,8 @@ $(document).ready(function() {
 				"zipcode": zipcode
 			},
 			success: function() {
-				$('#addAddress').modal('hide');
-				$('#successAddress').modal('show');
+				$('#addAddressModal').modal('hide');
+				$('#successAddAddress').modal('show');
 				var message = address1 + " " + address2 + " has been successfully added";
 				$('#addAddressMsg').text(message);
 			}

@@ -44,6 +44,16 @@ create table jobs
 	foreign key fk_addr(address_id) references addresses(id),
 	foreign key fk_type(type_id) references types(id)
 );
+
+create table billing (
+    id int auto_increment primary key,
+	item varchar(40) not null,
+	cost decimal not null,
+	quantity int not null default 1,
+	job_id int not null,
+	foreign key fk_billing(job_id) references jobs(id) 	
+);
+
 create table mowers (
 	id int auto_increment primary key,
 	start_date timestamp not null default current_timestamp,

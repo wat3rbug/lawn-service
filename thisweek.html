@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charsset="utf-8">
+	<title>The Lawn Service</title>
+	
+	<!-- Bootstrap Library -->
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link href="css/bootstrap-datetimepicker.css" rel="stylesheet">
+	<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
+</head>
+<body>
+	<!-- JQuery library -->
+	<script src="jquery-3.3.1.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/moment.js"></script>
+	<script src="js/bootstrap-datetimepicker.min.js"></script>
+	<script src="sidebar.js"></script>
+	<script src="thisweek.js"></script>
+
+	
+	<div class="col-sm-12">
+		<div class="jumbotron info">
+			<h1>The Lawn Service</h1>We like to mow it, mow it...
+		</div>
+	</div>
+
+
+	<div class="row">&nbsp;</div>
+	<div class="col-lg-12">
+		<div class="row">
+			<div class="col-sm-2" id="sidebar">
+			
+		
+			</div>
+			<div class="col-sm-9">
+				<p><h4>Jobs This Week</h4></p>
+			
+				<button type="button" class="btn btn-success" id="addJobBtn">
+					<span class="glyphicon glyphicon-plus"></span>&nbsp;Add Job
+				</button>
+				<div class="row">&nbsp;</div>
+				<div class="panel panel-info">
+					<div class="panel-body">
+						<table class="table tabel-striped" id="clients">
+							<thead class="thead-dark">
+								<th scope="col">Date</th>
+								<th scope="col">Cost</th>
+								<th scope="col">Customer</th>
+								<th scope="col">Billing</th>
+								<th scope="col">Complete</th>
+							</th>
+							<tbody></tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+<!-- Remove Job Section -->
+
+<div class="modal" id="successRemoveJob" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header d-block alert-success">
+				<h5 class="modal-title text-center">Success</h5>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<input type="hidden" id="rmJobId">
+					<div class="col-sm-12" id="rmJobMsg"></div>
+				</div>
+			</div>
+			<div class="modal-footer text-right">
+				<button type="button" class="btn btn-success" id="rmSuccessBtn">
+					<span class="glyphicon glyphicon-ok"></span>&nbsp;Close
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Edit Job Section -->
+
+<div class="modal fade" id="editJobModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header d-block alert-warning">
+				<h5 class="modal-title text-center">Edit Job</h5>
+			</div>
+			<div class="modal-body">
+				
+				<div class="row">
+					<div class="col-sm-6 text-right"><input type="hidden" id="editJobId">Date</div>
+					<div class="col-sm-6"><input id="editDate"></div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<div class="col-sm-6 text-right">Cost</div>
+					<div class="col-sm-6"><input id="editCost"></div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<div class="col-sm-6 text-right">Address</div>
+					<div class="col-sm-6"><input id="editAddress"></div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<div class="col-sm-6 text-right">Customer</div>
+					<div class="col-sm-6"><input id="editClient"></div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-warning" id="pushJobDBEdit">
+					<span class="glyphicon glyphicon-cloud-upload"></span>&nbsp;Update
+				</button>&nbsp;
+				<button type="button" class="btn btn-default" id="cancelJobEditBtn">
+					<span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Cancel
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+ <!-- Add Job Section -->
+
+<div class="modal" id="addJobModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header d-block alert-info">
+				<h5 class="modal-title text-center">Add Job</h5>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-sm-6 text-right">Date</div>
+					<div class="col-sm-6">
+						<div class="input-group mb-3">
+							<div class="input-group-prepend" id="addJobDate">								
+								<span class="input-group-text">
+									<i class="glyphicon glyphicon-calendar"></i>
+								</span>
+								<input type="text" class="form-control" name="addJobDate">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<div class="col-sm-6 text-right">Cost</div>
+					<div class="col-sm-6">
+						<div class="input-group mb-3">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="showDollar">$</span>
+							</div>
+							<input type="text" class="form-control" id="cost" aria-label="cost">
+						</div>
+					</div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<div class="col-sm-6 text-right">Job Type</div>
+					<div class="col-sm-6">
+						<select class="browser-default custom-select" id="addJobType">
+						</select>
+					</div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<div class="col-sm-6 text-right">Address</div>
+					<div class="col-sm-6">
+						<select class="default-browser custom-select" id="addressSelector">
+						</select>
+					</div>
+				</div>				
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" id="pushJobDB">
+					<span class="glyphicon glyphicon-cloud-upload"></span>&nbsp;Complete
+				</button>&nbsp;
+				<button type="button" class="btn btn-default" id="cancelJobBtn">
+					<span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Cancel
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal" id="successAddJob" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header d-block success">
+				<h5 class="modal-title text-center">Success</h5>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-sm-12" id="addJobMsg"></div>
+				</div>
+			</div>
+			<div class="modal-footer text-right">
+				<button type="button" class="btn btn-success" id="addSuccessBtn">
+					<span class="glyphicon glyphicon-ok"></span>&nbsp;Close
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+</html>
