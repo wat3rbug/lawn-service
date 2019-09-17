@@ -41,6 +41,9 @@ create table jobs
 	complete tinyint(1) not null default 0,
 	address_id int not null,
 	type_id int not null,
+	client_id int not null,
+	deleted tinyint(1) not null default 0,
+	foreign key fk_client(client_id) references clients(id),
 	foreign key fk_addr(address_id) references addresses(id),
 	foreign key fk_type(type_id) references types(id)
 );
@@ -61,12 +64,3 @@ create table mowers (
 	user_hash varchar(256) 
 	
 ); 
-
-
-
-create trigger `after_ins_lastname` after insert 
-on `clients` 
-for each row
-	update `clients` set `lastname` = 'unknown' where `lastname` is null or `lastname` = '' ;
-
-

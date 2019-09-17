@@ -95,6 +95,7 @@ $(document).ready(function() {
 		var phone = $('#editPhone').val();
 		var lastName = $('#editLastName').val();
 		var email = $('#editEmail').val();
+		var billing = $('#addressEditSelector').val();
 		$.ajax({
 			url: "editClient.php",
 			type: "post",
@@ -103,7 +104,8 @@ $(document).ready(function() {
 				"firstName": firstName,
 				"lastName": lastName,
 				"phone": phone,
-				"email": email
+				"email": email,
+				"billing": billing
 			},
 			success: function() {
 				window.parent.window.location.reload();

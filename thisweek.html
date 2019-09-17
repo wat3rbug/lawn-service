@@ -6,15 +6,15 @@
 	
 	<!-- Bootstrap Library -->
 	<link rel="stylesheet" href="css/bootstrap.min.css">
-	<link href="css/bootstrap-datetimepicker.css" rel="stylesheet">
 	<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
 </head>
 <body>
+	<!-- Bootstrap scripts -->
+	
+	
 	<!-- JQuery library -->
 	<script src="jquery-3.3.1.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
-	<script src="js/moment.js"></script>
-	<script src="js/bootstrap-datetimepicker.min.js"></script>
 	<script src="sidebar.js"></script>
 	<script src="thisweek.js"></script>
 
@@ -46,9 +46,11 @@
 							<thead class="thead-dark">
 								<th scope="col">Date</th>
 								<th scope="col">Cost</th>
+								<th scope="col">Type</th>
 								<th scope="col">Customer</th>
-								<th scope="col">Billing</th>
+								<th scope="col">Location</th>
 								<th scope="col">Complete</th>
+								<th scope="col">Action</th>								
 							</th>
 							<tbody></tbody>
 						</table>
@@ -124,9 +126,72 @@
 	</div>
 </div>
 
+ <!-- Edit Job Section -->
+
+<div class="modal fade" id="editJobModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header d-block alert-warning">
+				<h5 class="modal-title text-center">Edit Job</h5>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-sm-6 text-right">Date</div>
+					<div class="col-sm-6">
+
+						<div class="input-group-prepend">								
+							<span class="input-group-text" id="editShowDate">
+								<span class="glyphicon glyphicon-calendar"></span>
+							</span>
+							<input type="text" class="form-control" id="editJobDate">
+						</div>
+
+					</div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<div class="col-sm-6 text-right">Cost</div>
+					<div class="col-sm-6">
+						<div class="input-group mb-3">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="editShowDollar">$</span>
+							</div>
+							<input type="text" class="form-control" id="cost" aria-label="cost">
+						</div>
+					</div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<div class="col-sm-6 text-right">Job Type</div>
+					<div class="col-sm-6">
+						<select class="browser-default custom-select" id="editJobType">
+						</select>
+					</div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<div class="col-sm-6 text-right">Address</div>
+					<div class="col-sm-6">
+						<select class="default-browser custom-select" id="editAddressSelector">
+						</select>
+					</div>
+				</div>				
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" id="pushEditJobDB">
+					<span class="glyphicon glyphicon-cloud-upload"></span>&nbsp;Update
+				</button>&nbsp;
+				<button type="button" class="btn btn-default" id="cancelEditJobBtn">
+					<span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Cancel
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
  <!-- Add Job Section -->
 
-<div class="modal" id="addJobModal" tabindex="-1" role="dialog">
+<div class="modal fade" id="addJobModal" tabindex="-1" role="dialog">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header d-block alert-info">
@@ -136,14 +201,14 @@
 				<div class="row">
 					<div class="col-sm-6 text-right">Date</div>
 					<div class="col-sm-6">
-						<div class="input-group mb-3">
-							<div class="input-group-prepend" id="addJobDate">								
-								<span class="input-group-text">
-									<i class="glyphicon glyphicon-calendar"></i>
-								</span>
-								<input type="text" class="form-control" name="addJobDate">
-							</div>
+
+						<div class="input-group-prepend">								
+							<span class="input-group-text" id="showDate">
+								<span class="glyphicon glyphicon-calendar"></span>
+							</span>
+							<input type="text" class="form-control" id="addJobDate">
 						</div>
+
 					</div>
 				</div>
 				<div class="row">&nbsp;</div>
@@ -187,7 +252,75 @@
 	</div>
 </div>
 
-<div class="modal" id="successAddJob" tabindex="-1" role="dialog">
+<div class="modal fade" id="showClientInfoModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header d-block alert-info">
+				<h5 class="modal-title text-center" id="clientNameHeading"></h5>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-sm-6 text-right"><b>Name:</b></div>
+					<div class="col-sm-6"><label id="clientInfoName"></div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<div class="col-sm-6 text-right"><b>Phone:</b></div>
+					<div class="col-sm-6" id="clientInfoPhone"></div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<div class="col-sm-6 text-right"><b>Email:</b></div>
+					<div class="col-sm-6"  id="clientInfoEmail"></div>
+				</div>
+				<div class="row">&nbsp;</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" id="closeClientInfoBtn">
+					<span class="glyphicon glyphicon-remove"></span>&nbsp;Close
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="showAddressInfoModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header d-block alert-info">
+				<h5 class="modal-title text-center" id="addressHeading"></h5>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-sm-6 text-right"><b>Address:</b></div>
+					<div class="col-sm-6"><label id="addressInfoAddresses"></div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<div class="col-sm-6 text-right"><b>City:</b></div>
+					<div class="col-sm-6" id="addressInfoCity"></div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<div class="col-sm-6 text-right"><b>State:</b></div>
+					<div class="col-sm-6"  id="addressInfoState"></div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<div class="col-sm-6 text-right"><b>Zip code:</b></div>
+					<div class="col-sm-6"  id="addressInfoZip"></div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" id="closeAddressInfoBtn">
+					<span class="glyphicon glyphicon-remove"></span>&nbsp;Close
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="successAddJob" tabindex="-1" role="dialog">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header d-block success">
