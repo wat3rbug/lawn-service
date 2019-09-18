@@ -10,7 +10,7 @@ function removeClient(id) {
 		},
 		success: function(data) {
 			var client = data[0];
-			var message = client.firstName + " " + client.lastName + " has been removed";
+			var message = client.firstName + " " + client.lastName + " will be removed";
 			$('#rmClientId').val(id);
 			$('#rmClientMsg').text(message);
 			$('#successRemoveClient').modal('show');
@@ -68,6 +68,10 @@ $(document).ready(function() {
 
 	// client modal buttons
 	
+	$('#rmSuccessCancelBtn').on("click", function() {
+		$('#successRemoveClient').modal('hide');	
+	});
+	
 	$('#addClientBtn').on("click", function() {
 		$('#addClient').modal('show');
 	});
@@ -78,6 +82,17 @@ $(document).ready(function() {
 	
 	$('#addSuccessBtn').on("click", function() {
 		$('#successAddClient').modal('hide');
+		var id = $('#addClientId').val();
+		$.ajax({
+			url: "addClient.php",
+			type: "post",
+			data: {
+				"id": id
+			},
+			success: function() {
+				window.parent.window.location.reload();
+			}
+		});
 	});
 	
 	$('#cancelClientEditBtn').on("click", function() {
@@ -172,7 +187,7 @@ $(document).ready(function() {
 			},
 			success: function() {
 				$('#addClient').modal('hide');
-				$('#successClient').modal('show');
+				$('#successAddClient').modal('show');
 				var message = firstname + " " + lastname + " has been successfully added";
 				$('#addClientMsg').text(message);
 			}

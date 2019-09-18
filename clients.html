@@ -57,18 +57,21 @@
 <div class="modal" id="successRemoveClient" tabindex="-1" role="dialog">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
-			<div class="modal-header d-block alert-success">
-				<h5 class="modal-title text-center">Success</h5>
+			<div class="modal-header d-block alert-danger">
+				<h5 class="modal-title text-center">Remove Client</h5>
 			</div>
 			<div class="modal-body">
 				<div class="row">
 					<input type="hidden" id="rmClientId">
-					<div class="col-sm-12" id="rmClientMsg"></div>
+					<div class="col-sm-12 text-center" id="rmClientMsg"></div>
 				</div>
 			</div>
 			<div class="modal-footer text-right">
-				<button type="button" class="btn btn-success" id="rmSuccessBtn">
-					<span class="glyphicon glyphicon-ok"></span>&nbsp;Close
+				<button type="button" class="btn btn-danger" id="rmSuccessBtn">
+					<span class="glyphicon glyphicon-ok"></span>&nbsp;Ok
+				</button>&nbsp;
+				<button type="button" class="btn btn-default" id="rmSuccessCancelBtn">
+					<span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Cancel
 				</button>
 			</div>
 		</div>
@@ -130,7 +133,7 @@
 <div class="modal" id="addClient" tabindex="-1" role="dialog">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
-			<div class="modal-header d-block alert-info">
+			<div class="modal-header d-block alert-success">
 				<h5 class="modal-title text-center">Add Client</h5>
 			</div>
 			<div class="modal-body">
@@ -177,12 +180,12 @@
 <div class="modal" id="successAddClient" tabindex="-1" role="dialog">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
-			<div class="modal-header d-block success">
+			<div class="modal-header d-block alert-success">
 				<h5 class="modal-title text-center">Success</h5>
 			</div>
 			<div class="modal-body">
 				<div class="row">
-					<div class="col-sm-12" id="addClientMsg"></div>
+					<div class="col-sm-12 text-center" id="addClientMsg"><input type="hidden" id="addClientId"></div>
 				</div>
 			</div>
 			<div class="modal-footer text-right">
