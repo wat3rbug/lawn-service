@@ -41,6 +41,20 @@ class Job {
 			$statement->execute();
 		}
 	}
+	
+	function getJobDetailsForId($id) {
+		if (isset($id) && $id > 0) {
+			$sql = "SELECT jobs.id, jobs.job_date, clients.firstName, addresses.address1 FROM jobs JOIN clients ON jobs.client_id = clients.id JOIN addresses ON jobs.address_id = addresses.id WHERE jobs.id = ?";
+			$statement = $this->conn->prepare($sql);
+			$statement->bindParam(1, $id);
+			$statement->execute();
+			while ($row = $statement->fetch()) {
+				$output[] = $row;
+			}
+		}
+		return $output;
+	}
+	
 	function getJobForId($id) {
 		if (isset($id) && $id > 0) {
 			$sql = "SELECT * FROM jobs WHERE id = ?";

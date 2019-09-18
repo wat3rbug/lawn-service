@@ -1,41 +1,4 @@
-function setupDropDowns() {
-	
-	// setup address dropdowns
-	
-	$.ajax({
-		url: "getAllAddresses.php",	
-		dataType: "json",
-		type: "get",
-		success: function(result) {
-			if (result != null) {
-				$('#addressSelector').empty();
-				result.forEach(function(address) {
-					var message = address.address1;
-					if (address.address2 != null) message += " " + address.address2;
-					message += " " + address.city + ", " + address.state;
-					message += " " + address.zipcode; 
-					$('#addressSelector').append($('<option>').text(message).val(address.id));
-				});
-			}
-			
-		}
-	});
-	// setup type dropdown
-	
-	$.ajax({
-		url: "getAllTypes.php",
-		dataType: "json",
-		type: "get",
-		success: function(result) {
-			if (result != null) {
-				$('#addJobType').empty();
-				result.forEach(function(type) {
-					$('#addJobType').append($('<option>').text(type.type).val(type.id));
-				});
-			}		
-		}	
-	});
-}
+
 function editJob(id) {
 	$.ajax({
 		url: "getJobForId.php",
@@ -44,11 +7,14 @@ function editJob(id) {
 		data: {
 			"id": id
 		},
-		success: function(result){
+		success: function(result) {
 			if (result != null) {
 				$('#editJobModal').modal('show');
 				result.forEach(function(job) {
-					// under construction
+					$('#editCost').val(parseFloat(job.cost).toFixed(2));
+					// get the client info for selector
+					// get the address infor for selector
+					// fill in the rest
 				});
 			}		
 		}
@@ -56,14 +22,25 @@ function editJob(id) {
 }
 
 function removeJob(id) {
+
 	$.ajax({
-		url: "removeJob.php",
+		url: "getJobDetailsForId.php",
+		dataType: "json",
 		type: "post",
 		data: {
-			"id": id	
+			"id": id
 		},
-		success: function() {
-			window.parent.window.location.reload();
+		success: function(result) {
+			if (result != null) {
+				result.forEach(function (job) {
+					var jobDate = convertDashDateToSpace(job.job_date);
+					var message = "Removing the job for " + job.firstName + " at ";
+					message += job.address1 + " on " + jobDate + ".";
+					$('#rmJobMsg').text(message);
+					$('#successRemoveJob').modal('show');
+					$('#rmJobId').val(id);
+				});
+			}
 		}	
 	});
 }
@@ -84,9 +61,9 @@ function buildTable() {
 					} else {
 						row += job.type + "</td>";
 					}
-					row += "<td><button type='button' class='btn btn-link'";
+					row += "<td><button type='button' class='btn btn-outline-primary'";
 					row += " onclick='getClientInfo(" + job.client_id + ")'>" + job.firstName + "</button></td>";
-					row += "<td><button type='button' class='btn btn-link' ";
+					row += "<td><button type='button' class='btn btn-outline-primary' ";
 					row += "onclick='getAddressInfo(" + job.address_id + ")'>" + job.address1 + "</button></td>";
 					row += "<td><span class='glyphicon glyphicon-";
 					row += (parseInt(job.complete) == 1) ? "check" : "unchecked";
@@ -168,11 +145,17 @@ function getClientInfo(id) {
 }
 
 $(document).ready(function() {
-	
-	
-	setupDropDowns();
 		
 	// modal non-database buttons
+	
+	$('#rmSuccessBtn').on('click', function() {
+		$('#successRemoveJob').modal('hide');
+		window.parent.window.location.reload();
+	});
+	
+	$('#rmSuccessCancelBtn').on("click", function() {
+		$('#successRemoveJob').modal('hide');	
+	});
 	
 	$('#cancelEditJobBtn').on("click", function() {
 		$('#editJobModal').modal('hide');	
@@ -195,8 +178,23 @@ $(document).ready(function() {
 	});
 	
 	// database calls
-	
+		
+	setupDropDowns();
 	buildTable();
+	
+	$('#rmSuccessBtn').on("click", function() {
+		var id = $('#rmJobId').val();
+		$.ajax({
+			url: "removeJob.php",
+			type: "post",
+			data: {
+				"id": id
+			}, 
+			success: function() {
+				window.parent.window.location.reload();
+			}
+		});
+	});
 	
 	$('#pushJobDB').on("click", function() {
 		var origDate = $('#addJobDate').val();
