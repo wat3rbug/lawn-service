@@ -50,7 +50,78 @@
 			</div>
 		</div>
 	</div>
+	<div id="editClientDiv"></div>
+	<div id="removeClientDiv"></div>
 </body>
+
+ <!-- Add Client Section -->
+
+<div class="modal" id="addClientModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header d-block alert-success">
+				<h5 class="modal-title text-center">Add Client</h5>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-sm-6 text-right">First Name</div>
+					<div class="col-sm-6"><input id="firstName"></div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<div class="col-sm-6 text-right">Last Name</div>
+					<div class="col-sm-6"><input id="lastName"></div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<div class="col-sm-6 text-right">Phone</div>
+					<div class="col-sm-6"><input id="phone"></div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<div class="col-sm-6 text-right">Email</div>
+					<div class="col-sm-6"><input id="email"></div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<div class="col-sm-6 text-right">Billing Address</div>
+					<div class="col-sm-6">
+						<select class="browser-default custom-select" id="addAddressSelector">
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" id="pushClientDB">
+					<span class="glyphicon glyphicon-cloud-upload"></span>&nbsp;Complete
+				</button>&nbsp;
+				<button type="button" class="btn btn-default" id="addClientCancelBtn">
+					<span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Cancel
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal" id="successAddClient" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header d-block alert-success">
+				<h5 class="modal-title text-center">Success</h5>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-sm-12 text-center" id="addClientMsg"><input type="hidden" id="addClientId"></div>
+				</div>
+			</div>
+			<div class="modal-footer text-right">
+				<button type="button" class="btn btn-success" id="addSuccessBtn">
+					<span class="glyphicon glyphicon-ok"></span>&nbsp;Close
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 <!-- Remove Client Section -->
 
@@ -120,77 +191,8 @@
 				<button type="button" class="btn btn-warning" id="pushClientDBEdit">
 					<span class="glyphicon glyphicon-cloud-upload"></span>&nbsp;Update
 				</button>&nbsp;
-				<button type="button" class="btn btn-default" id="cancelClientEditBtn">
+				<button type="button" class="btn btn-default" id="editClientCancelBtn">
 					<span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Cancel
-				</button>
-			</div>
-		</div>
-	</div>
-</div>
-
- <!-- Add Client Section -->
-
-<div class="modal" id="addClient" tabindex="-1" role="dialog">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header d-block alert-success">
-				<h5 class="modal-title text-center">Add Client</h5>
-			</div>
-			<div class="modal-body">
-				<div class="row">
-					<div class="col-sm-6 text-right">First Name</div>
-					<div class="col-sm-6"><input id="firstName"></div>
-				</div>
-				<div class="row">&nbsp;</div>
-				<div class="row">
-					<div class="col-sm-6 text-right">Last Name</div>
-					<div class="col-sm-6"><input id="lastName"></div>
-				</div>
-				<div class="row">&nbsp;</div>
-				<div class="row">
-					<div class="col-sm-6 text-right">Phone</div>
-					<div class="col-sm-6"><input id="phone"></div>
-				</div>
-				<div class="row">&nbsp;</div>
-				<div class="row">
-					<div class="col-sm-6 text-right">Email</div>
-					<div class="col-sm-6"><input id="email"></div>
-				</div>
-				<div class="row">&nbsp;</div>
-				<div class="row">
-					<div class="col-sm-6 text-right">Billing Address</div>
-					<div class="col-sm-6">
-						<select class="browser-default custom-select" id="addAddressSelector">
-						</select>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-success" id="pushClientDB">
-					<span class="glyphicon glyphicon-cloud-upload"></span>&nbsp;Complete
-				</button>&nbsp;
-				<button type="button" class="btn btn-default" id="cancelClientBtn">
-					<span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Cancel
-				</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="modal" id="successAddClient" tabindex="-1" role="dialog">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header d-block alert-success">
-				<h5 class="modal-title text-center">Success</h5>
-			</div>
-			<div class="modal-body">
-				<div class="row">
-					<div class="col-sm-12 text-center" id="addClientMsg"><input type="hidden" id="addClientId"></div>
-				</div>
-			</div>
-			<div class="modal-footer text-right">
-				<button type="button" class="btn btn-success" id="addSuccessBtn">
-					<span class="glyphicon glyphicon-ok"></span>&nbsp;Close
 				</button>
 			</div>
 		</div>

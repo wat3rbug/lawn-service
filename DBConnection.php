@@ -10,7 +10,7 @@ class DBConnection {
 	function __construct() {
 		$this->password = "67triumph";
 		$this->database = "lawn_service";
-		$this->hostname = "db-server";
+		$this->hostname = "db-server1";
 		$this->username = "lawnmowerman";
 	}
 }

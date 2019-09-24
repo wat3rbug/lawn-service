@@ -36,7 +36,7 @@ class Client {
 	
 	function getClientForId($id) {
 		if (isset($id) && $id > 0) {
-			$sql = "SELECT id, firstName, lastName, email, phone FROM clients WHERE deleted = 0 AND id = ?";
+			$sql = "SELECT id, firstName, lastName, email, phone, billing FROM clients WHERE deleted = 0 AND id = ?";
 			$statement = $this->conn->prepare($sql);
 			$statement->bindParam(1, $id);
 			$statement->execute();

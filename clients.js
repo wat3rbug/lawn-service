@@ -1,4 +1,4 @@
-// gives notification that a client is removed
+
 
 function removeClient(id) {
 	$.ajax({
@@ -33,66 +33,65 @@ function editClient(id) {
 			$('#editClientId').val(client.id);
 			$('#editPhone').val(client.phone);
 			$('#editEmail').val(client.email);
+			$('#addressEditSelector').val(client.billing);
  			$('#editClientModal').modal('show');
 		}
 	});
 }
 
-function loadAddresses() {
-	$.ajax({
-		url: "getAllAddresses.php",
-		type: "get",
-		datatype: "json",
-		success: function(data) {
-			if (data != null) {
-				$('#addressEditSelector').empty();
-				$('#addAddressSelector').empty();
-				data.forEach(function(address) {
-					var message = address.address1;
-					if (address.address2 != null) message += " " + address.address2;
-					message += " " + address.city + ", " + address.state;
-					message += " " + address.zipcode; 
-					$('#addressEditSelector').append($('<option>').text(message).val(address.id));
-					$('#addAddressSelector').append($('<option>').text(message).val(address.id));
-				});
-			}
-		}	
-	});
+function cleanRemoveModal() {
+	$('#rmClientId').val();
+	$('#rmClientMsg').text();
+}
+
+function cleanAddModal() {
+	$('#firstName').val();
+	$('#lastName').val();
+	$('#email').val();
+	$('#phone').val();
+	$('#addAddressSelector').val();
 }
 
 $(document).ready(function() {
 	
-	// load addresses ahead of time
-	
-	loadAddresses();
-
-	// client modal buttons
-	
-	$('#rmSuccessCancelBtn').on("click", function() {
-		$('#successRemoveClient').modal('hide');	
-	});
+	// Add client section
 	
 	$('#addClientBtn').on("click", function() {
-		$('#addClient').modal('show');
+		$('#addClientModal').modal('show');	
 	});
 	
-	$('#cancelClientBtn').on("click", function() {
-		$('#addClient').modal('hide');
+	$('#addClientCancelBtn').on("click", function() {
+		$('#addClientModal').modal('hide');	
 	});
 	
-	$('#addSuccessBtn').on("click", function() {
-		$('#successAddClient').modal('hide');
-		var id = $('#addClientId').val();
+	$('#pushClientDB').on("click", function() {
+		var firstName = $('#firstName').val();
+		var lastName = $('#lastName').val();
+		var email = $('#email').val();
+		var phone = $('#phone').val();
+		var billing = $('#addAddressSelector').val();
 		$.ajax({
 			url: "addClient.php",
 			type: "post",
 			data: {
-				"id": id
+				"firstname": firstName,
+				"lastname": lastName,
+				"email": email,
+				"phone": phone,
+				"billing": billing
 			},
 			success: function() {
+				cleanAddModal();
+				$('#addClientModal').modal('hide');
 				window.parent.window.location.reload();
-			}
+			}	
 		});
+	});
+	
+	// Edit client section
+	
+	$('#editClientCancelBtn').on("click", function() {
+		$('#editClientModal').modal('hide');	
 	});
 	
 	$('#cancelClientEditBtn').on("click", function() {
@@ -128,11 +127,14 @@ $(document).ready(function() {
 		});
 	});
 	
-	// actually removes a client from active database
+	// Remove client section
+	
+	$('#rmSuccessCancelBtn').on("click", function() {
+		$('#successRemoveClient').modal('hide');	
+		cleanRemoveModal();
+	});
 	
 	$('#rmSuccessBtn').on("click", function() {
-		$('#rmClientMsg').text();
-		$('#successRemoveClient').modal('hide');
 		var id = $('#rmClientId').val();
 		$.ajax({
 			url: "removeClient.php",
@@ -141,9 +143,10 @@ $(document).ready(function() {
 				"id": id
 			},
 			success: function() {
+				cleanRemoveModal();
 				window.parent.window.location.reload();
-			}
-		})
+			}	
+		});
 	});
 	
 	// setup table of clients
@@ -169,28 +172,25 @@ $(document).ready(function() {
 		}
 	});
 	
-	// adding a client from modal
-	
-	$('#pushClientDB').on("click", function() {
-		var firstname = $('#firstName').val();
-		var lastname = $('#lastName').val();
-		var phone = $('#phone').val();
-		var email = $('#email').val();
-		$.ajax({
-			url: "addClient.php",
-			type: "post",
-			data: {
-				"firstname": firstname,
-				"lastname": lastname,
-				"phone": phone,
-				"email": email
-			},
-			success: function() {
-				$('#addClient').modal('hide');
-				$('#successAddClient').modal('show');
-				var message = firstname + " " + lastname + " has been successfully added";
-				$('#addClientMsg').text(message);
+	$.ajax({
+		url: "getAllAddresses.php",
+		type: "get",
+		datatype: "json",
+		success: function(data) {
+			if (data != null) {
+				$('#addressEditSelector').empty();
+				$('#addressEditSelector').append($('<option>').text('--- None selected ---').val('0'));
+				$('#addAddressSelector').empty();
+				$('#addAddressSelector').append($('<option>').text('--- None selected ---').val('0'));			
+				data.forEach(function(address) {
+					var message = address.address1;
+					if (address.address2 != null) message += " " + address.address2;
+					message += " " + address.city + ", " + address.state;
+					message += " " + address.zipcode; 
+					$('#addressEditSelector').append($('<option>').text(message).val(address.id));
+					$('#addAddressSelector').append($('<option>').text(message).val(address.id));
+				});
 			}
-		});
+		}	
 	});
 });

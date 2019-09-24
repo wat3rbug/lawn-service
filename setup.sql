@@ -13,7 +13,7 @@ create table addresses (
 	state varchar(40) not null,
 	zipcode varchar(40) not null,
 	deleted tinyint(1) not null default 0	
-);
+) engine = InnoDB;
 
 create table clients (
 	id int auto_increment primary key,
@@ -23,12 +23,12 @@ create table clients (
 	email varchar(40),
 	deleted tinyint(1) not null default 0,
 	billing int not null default 0
-);
+) engine = InnoDB;
 
 create table types (
 	id int auto_increment primary key,
 	type varchar(20) not null
-);
+) engine = InnoDB;
 insert into types (type) values ("mow");
 insert into types (type) values ("mulch");
 insert into types (type) values ("landscape");
@@ -46,7 +46,7 @@ create table jobs
 	foreign key fk_client(client_id) references clients(id),
 	foreign key fk_addr(address_id) references addresses(id),
 	foreign key fk_type(type_id) references types(id)
-);
+) engine = InnoDB;
 
 create table billing (
     id int auto_increment primary key,
@@ -55,7 +55,7 @@ create table billing (
 	quantity int not null default 1,
 	job_id int not null,
 	foreign key fk_billing(job_id) references jobs(id) 	
-);
+) engine = InnoDB;
 
 create table mowers (
 	id int auto_increment primary key,
@@ -63,4 +63,4 @@ create table mowers (
 	email varchar(40) not null,
 	user_hash varchar(256) 
 	
-); 
+) engine = InnoDB; 
