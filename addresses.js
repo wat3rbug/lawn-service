@@ -10,7 +10,7 @@ function removeAddress(id) {
 		},
 		success: function(data) {
 			var address = data[0];
-			var message = address.address1 + " " + address.address2 + " has been removed";
+			var message = address.address1 + " " + address.address2 + " will be removed";
 			$('#rmAddressId').val(id);
 			$('#rmAddressMsg').text(message);
 			$('#successRemoveAddress').modal('show');
@@ -39,31 +39,54 @@ function editAddress(id) {
 	});
 }
 
+function cleanEditModal() {
+	$('#editAddress1').val();
+	$('#editAddress2').val();
+	$('#editCity').val();
+	$('#editAddressId').val();
+	$('#editState').val();
+	$('#editZipCode').val();
+}
+
+function cleanAddModal() {
+	$('#Address1').val();
+	$('#Address2').val();
+	$('#city').val();
+	$('#state').val();
+	$('#zipCode').val();
+}
+
 $(document).ready(function() {
 
-	// client modal buttons
+	// Remove Address section
 	
-	$('#addAddressBtn').on("click", function() {
-		$('#addAddressModal').modal('show');
+	$('#rmSuccessCancelBtn').on("click", function() {
+		$('#rmAddressMsg').text();
+		$('#rmAddressId').val();
+		$('#successRemoveAddress').modal('hide');
 	});
 	
-	$('#cancelAddressBtn').on("click", function() {
-		$('#addAddressModal').modal('hide');
+	$('#rmSuccessBtn').on("click", function() {
+		$('#rmAddressMsg').text();
+		$('#successRemoveAddress').modal('hide');
+		var id = $('#rmAddressId').val();
+		$.ajax({
+			url: "removeAddress.php",
+			type: "post",
+			data: {
+				"id": id
+			},
+			success: function() {
+				window.parent.window.location.reload();
+			}
+		})
 	});
 	
-	$('#addSuccessBtn').on("click", function() {
-		$('#successAddAddress').modal('hide');
-		window.parent.window.location.reload();
-	});
+	// Edit Address section
 	
 	$('#cancelAddressEditBtn').on("click", function() {
 		$('#editAddressModal').modal('hide');
-		$('#editAddress1').val();
-		$('#editAddress2').val();
-		$('#editCity').val();
-		$('#editAddressId').val();
-		$('#editState').val();
-		$('#editZipCode').val();
+		cleanEditModal();
 	});
 	
 	$('#pushAddressDBEdit').on("click", function() {
@@ -85,27 +108,44 @@ $(document).ready(function() {
 				"zipcode": zipcode
 			},
 			success: function() {
+				cleanEditModal();
 				window.parent.window.location.reload();
 			}
 		});
 	});
 	
-	// actually removes a client from active database
+	// Add Address section
 	
-	$('#rmSuccessBtn').on("click", function() {
-		$('#rmAddressMsg').text();
-		$('#successRemoveAddress').modal('hide');
-		var id = $('#rmAddressId').val();
+	$('#addAddressBtn').on("click", function() {
+		$('#addAddressModal').modal('show');
+	});
+	
+	$('#cancelAddressBtn').on("click", function() {
+		$('#addAddressModal').modal('hide');
+	});
+	
+	$('#pushAddressDB').on("click", function() {
+		var address1 = $('#Address1').val();
+		var address2 = $('#Address2').val();
+		var city = $('#city').val();
+		var state = $('#state').val();
+		var zipcode = $('#zipCode').val();
 		$.ajax({
-			url: "removeAddress.php",
+			url: "addAddress.php",
 			type: "post",
 			data: {
-				"id": id
+				"address1": address1,
+				"address2": address2,
+				"city": city,
+				"state": state,
+				"zipcode": zipcode
 			},
 			success: function() {
+				$('#addAddressModal').modal('hide');
+				cleanAddModal();
 				window.parent.window.location.reload();
 			}
-		})
+		});
 	});
 	
 	// setup table of address
@@ -135,30 +175,19 @@ $(document).ready(function() {
 		}
 	});
 	
-	// adding a client from modal
-	
-	$('#pushAddressDB').on("click", function() {
-		var address1 = $('#Address1').val();
-		var address2 = $('#Address2').val();
-		var city = $('#city').val();
-		var state = $('#state').val();
-		var zipcode = $('#zipCode').val();
-		$.ajax({
-			url: "addAddress.php",
-			type: "post",
-			data: {
-				"address1": address1,
-				"address2": address2,
-				"city": city,
-				"state": state,
-				"zipcode": zipcode
-			},
-			success: function() {
-				$('#addAddressModal').modal('hide');
-				$('#successAddAddress').modal('show');
-				var message = address1 + " " + address2 + " has been successfully added";
-				$('#addAddressMsg').text(message);
-			}
-		});
-	});
+	// $.ajax({
+// 		url: "getAllStates.php",
+// 		dataType: "json",
+// 		type: "get",
+// 		success: function(data) {
+// 			if (data != null) {
+// 				$('#stateEditSelector').empty();
+// 				$('#stateAddSelector').empty();
+// 				data.forEach(function(state) {
+// 					$('#stateEditSelector').append($('<option>').text(state.state).val(state.post_code));
+// 					$('#stateAddSelector').append($('<option>').text(state.state).val(state.postal_code));
+// 				});
+// 			}
+// 		}
+// 	})
 });

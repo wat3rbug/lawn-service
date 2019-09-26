@@ -17,7 +17,7 @@
 	<script src="js/bootstrap.min.js"></script>
 	<script src="sidebar.js"></script>
 	<script src="thisweek.js"></script>
-	<script src="setupDropDowns.js"></script>
+	<script src="billing.js"></script>
 
 	
 	<div class="col-sm-12">
@@ -42,7 +42,7 @@
 				<div class="row">&nbsp;</div>
 				<div class="panel panel-info">
 					<div class="panel-body">
-						<table class="table tabel-striped" id="clients">
+						<table class="table table-striped" id="clients">
 							<thead class="thead-dark">
 								<th scope="col">Date</th>
 								<th scope="col">Cost</th>
@@ -67,7 +67,7 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header d-block alert-danger">
-				<h5 class="modal-title text-center">Removing Job</h5>
+				<h5 class="modal-title text-center">Remove Job</h5>
 			</div>
 			<div class="modal-body">
 				<div class="row">
@@ -96,6 +96,7 @@
 				<h5 class="modal-title text-center">Edit Job</h5>
 			</div>
 			<div class="modal-body">
+				<input type="hidden" id="editJob">
 				<div class="row">
 					<div class="col-sm-6 text-right">Date</div>
 					<div class="col-sm-6">
@@ -145,6 +146,9 @@
 				</div>				
 			</div>
 			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" id="editBillingBtn">
+					<span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit Billing
+				</button>&nbsp;
 				<button type="button" class="btn btn-warning" id="pushEditJobDB">
 					<span class="glyphicon glyphicon-cloud-upload"></span>&nbsp;Update
 				</button>&nbsp;
@@ -210,7 +214,7 @@
 				<div class="row">
 					<div class="col-sm-6 text-right">Address</div>
 					<div class="col-sm-6">
-						<select class="default-browser custom-select" id="addressSelector">
+						<select class="default-browser custom-select" id="addAddressSelector">
 						</select>
 					</div>
 				</div>				
@@ -294,6 +298,173 @@
 		</div>
 	</div>
 </div>
+
+<!-- View Billing Modal -->
+
+<div class="modal fade" id="viewBillingModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header d-block alert-primary">
+				<h5 class="modal-title text-center">Billing</h5>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-sm-12 text-center">
+						<table class="table table-striped" id="viewBillingItems">
+							<thead>
+								<th scope="col">Item</th>
+								<th scope="col">Cost per Unit</th>
+								<th scope="col">Quantity</th>
+								<th scope="col">Total</th>						
+							</thead>
+							<tbody></tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer text-right">
+				<button type="button" class="btn btn-primary" id="viewBillingCloseBtn">
+					<span class="glyphicon glyphicon-remove"></span>&nbsp;Close
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Add Billing Modal -->	
+
+<div class="modal fade" id="addBillingModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header d-block alert-success">
+				<h5 class="modal-title text-center">Billing</h5>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<input type="hidden" id="addBillingJobId">
+					<div class="col-sm-12 text-center">
+						<table class="table table-striped" id="addBillingItems">
+							<thead>
+								<th scope="col">Item</th>
+								<th scope="col">Cost per Unit</th>
+								<th scope="col">Quantity</th>
+								<th scope="col">Total</th>	
+								<th scope="col">Action</th>					
+							</thead>
+							<tbody></tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer text-right">
+				<button type="button" class="btn btn-danger" id="clearAddBillingBtn">
+					<span class="glyphicon glyphicon-minus"></span>&nbsp;Clear All
+				</button>&nbsp;
+				<button type="button" class="btn btn-success" id="addBillingItem">
+					<span class="glyphicon glyphicon-plus"></span>&nbsp;Add Billing Item
+				</button>&nbsp;
+				<button type="button" class="btn btn-primary" id="viewBillingCloseBtn">
+					<span class="glyphicon glyphicon-remove"></span>&nbsp;Close
+				</button>
+			</div>
+		</div>
+	</div>
+</div>	
+
+
+<!-- Add Billing Item modal -->
+
+<div class="modal fade" id="addBillingItemModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header d-block alert-success">
+				<h5 class="modal-title text-center">Add Billing Item</h5>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<input type="hidden" id="addBillingItemJobId">
+					<div class="col-sm-6 text-right">Name</div>
+					<div class="col-sm-6">				
+						<input type="text" class="form-control" id="addBillingItemName">
+					</div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<div class="col-sm-6 text-right">Cost</div>
+					<div class="col-sm-3">
+						<div class="input-group input-group-sm mb-3">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="addBillingItemCost">$</span>
+							</div>
+							<input type="text" class="form-control" aria-label="small" id="addBillingItemMoney" aria-describedby="addBillingItemCost">
+						</div>
+					</div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<div class="col-sm-6 text-right">Quantity</div>
+					<div class="col-sm-3">
+						<div class="input-group input-group-sm mb-3">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="addBillingItemQuantity">#</span>
+							</div>
+							<input type="text" class="form-control" aria-label="small" id="addBillingItemNum" aria-describedby="addBillingItemQuantity">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" id="addBillingItemBtn">
+					<span class="glyphicon glyphicon-plus"></span>&nbsp;Add Billing Item
+				</button>&nbsp;
+				<button type="button" class="btn btn-default" id="addBillingItemCloseBtn">
+					<span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Cancel
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+				
+<!-- Edit Billing Modal -->
+
+<div class="modal fade" id="editBillingModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header d-block alert-warning">
+				<h5 class="modal-title text-center">Edit Billing</h5>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<input type="hidden" id="editBillingJobId">
+					<div class="col-sm-12 text-center">
+						<table class="table table-striped" id="editBillingItems">
+							<thead>
+								<th scope="col">Item</th>
+								<th scope="col">Cost per Unit</th>
+								<th scope="col">Quantity</th>
+								<th scope="col">Action</th>	
+								<th scope="col">Total</th>					
+							</thead>
+							<tbody></tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer text-right">
+				<button type="button" class="btn btn-danger" id="clearEditBillingBtn">
+					<span class="glyphicon glyphicon-minus"></span>&nbsp;Clear All
+				</button>&nbsp;
+				<button type="button" class="btn btn-success" id="addEditBillingItem">
+					<span class="glyphicon glyphicon-plus"></span>&nbsp;Add Billing Item
+				</button>&nbsp;
+				<button type="button" class="btn btn-primary" id="editBillingCloseBtn">
+					<span class="glyphicon glyphicon-remove"></span>&nbsp;Close
+				</button>
+			</div>
+		</div>
+	</div>
+</div>			
+		
 
 <div class="modal fade" id="successAddJob" tabindex="-1" role="dialog">
 	<div class="modal-dialog" role="document">

@@ -32,6 +32,24 @@ class Job {
 		}
 		return $output;
 	}
+	function toggleJobComplete($id) {
+		if (isset($id) && $id > 0) {
+			$sql = "SELECT complete from jobs WHERE id = ?";
+			$statement = $this->conn->prepare($sql);
+			$statement->bindParam(1, $id);
+			$statement->execute();
+			$raw = NULL;
+			while ($row = $statement->fetch()) {
+				$raw = $row['complete'];
+			}
+			$complete = ($raw == 0) ? 1 : 0;
+			$sql = "UPDATE jobs set complete = ? where id = ?";
+			$statement = $this->conn->prepare($sql);
+			$statement->bindParam(1, $complete);
+			$statement->bindParam(2, $id);
+			$statement->execute();
+		}
+	}
 	
 	function removeJob($id) {
 		if (isset($id) && $id > 0) {
@@ -68,13 +86,39 @@ class Job {
 		return $output;
 	}
 	
-	function addJob($date, $cost, $type, $address) {
-		$sql = "INSERT INTO jobs (job_date, cost, type_id, address_id) VALUES (?, ?, ?, ?)";
+	function addJob($date, $cost, $type, $address, $client) {
+		$sql = "INSERT INTO jobs (job_date, cost, type_id, address_id, client_id) VALUES (?, ?, ?, ?, ?)";
 		$statement = $this->conn->prepare($sql);
 		$statement->bindParam(1, $date);
 		$statement->bindParam(2, $cost);
 		$statement->bindParam(3, $type);
 		$statement->bindParam(4, $address);
+		$statement->bindParam(5, $client);
+		$statement->execute();
+		$sql = "SELECT TOP 1 id FROM jobs where job_date = ? AND cost = ? AND type_id = ? AND address_id = ? AND client_id = ? ORDER BY id DESC";
+		$statement = $this->conn->prepare($sql);
+		$statement->bindParam(1, $date);
+		$statement->bindParam(2, $cost);
+		$statement->bindParam(3, $type);
+		$statement->bindParam(4, $address);
+		$statement->bindParam(5, $client);
+		$statement->execute();
+		while ($row = $statement->fetch()) {
+			$output[] = $row;
+		}
+		return $output;
+	}
+
+	
+	function editJob($date, $cost, $type, $address, $client, $id) {
+		$sql = "UPDATE jobs SET job_date = ?, cost = ?, type_id = ?, address_id = ?, client_id = ? WHERE id = ?";
+		$statement = $this->conn->prepare($sql);
+		$statement->bindParam(1, $date);
+		$statement->bindParam(2, $cost);
+		$statement->bindParam(3, $type);
+		$statement->bindParam(4, $address);
+		$statement->bindParam(5, $client);
+		$statement->bindParam(6, $id);
 		$statement->execute();
 	}
 }
