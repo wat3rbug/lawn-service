@@ -157,6 +157,7 @@ $(document).ready(function() {
 		type: "get",
 		success: function(data) {
 			if (data != null) {
+				$('#addresses').find('tbody tr').remove();
 				data.forEach(function(address) {
 					var message = "<tr><td>" + address.address1 + " ";
 					if (address.address2 != null) message+= address.address2;
@@ -168,26 +169,10 @@ $(document).ready(function() {
 					message += " class='btn btn-outline-danger' id='removeAddress' data-toggle='tooltip' title='Remove Address'";
 					message += " onclick='removeAddress(" + address.id + ")'><span class='glyphicon glyphicon-remove'></span>";
 					message += "</td></tr>\n";
-	 				$('#addresses tr:last').after(message);
+	 				$('#addresses').append(message);
 				});
 			}
 			
 		}
 	});
-	
-	// $.ajax({
-// 		url: "getAllStates.php",
-// 		dataType: "json",
-// 		type: "get",
-// 		success: function(data) {
-// 			if (data != null) {
-// 				$('#stateEditSelector').empty();
-// 				$('#stateAddSelector').empty();
-// 				data.forEach(function(state) {
-// 					$('#stateEditSelector').append($('<option>').text(state.state).val(state.post_code));
-// 					$('#stateAddSelector').append($('<option>').text(state.state).val(state.postal_code));
-// 				});
-// 			}
-// 		}
-// 	})
 });

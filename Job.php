@@ -25,13 +25,28 @@ class Job {
 		$sql = "SELECT jobs.id, job_date, cost, type, address_id, client_id, complete, clients.firstName, addresses.address1 ";
 		$sql .= "FROM jobs INNER JOIN types ON jobs.type_id = types.id INNER JOIN ";
 		$sql .= "addresses ON jobs.address_id = addresses.id INNER JOIN clients ON jobs.client_id = clients.id where "; 
-		$sql .= "jobs.deleted = 0";
+		$sql .= "jobs.deleted = 0 ORDER BY jobs.job_date DESC";
 		$statement = $this->conn->query($sql);
 		while($row = $statement->fetch()) {
 			$output[] = $row;
 		}
 		return $output;
 	}
+	
+	function getAllJobsBetweenDates($beginning, $end) {
+		if (isset($beginning) && isset($end)) {
+			$sql = "SELECT jobs.id, job_date, cost, type, address_id, client_id, complete, clients.firstName, addresses.address1 FROM jobs INNER JOIN types ON jobs.type_id = types.id INNER JOIN addresses ON jobs.address_id = addresses.id INNER JOIN clients ON jobs.client_id = clients.id where jobs.deleted = 0 AND jobs.job_date BETWEEN ? AND ? ORDER BY jobs.job_date DESC";
+			$statement = $this->conn->prepare($sql);
+			$statement->bindParam(1, $beginning);
+			$statement->bindParam(2, $end);
+			$statement->execute();
+			while ($row = $statement->fetch()) {
+				$output[] = $row;
+			}
+			return $output;
+		}
+	}
+	
 	function toggleJobComplete($id) {
 		if (isset($id) && $id > 0) {
 			$sql = "SELECT complete from jobs WHERE id = ?";
@@ -95,7 +110,7 @@ class Job {
 		$statement->bindParam(4, $address);
 		$statement->bindParam(5, $client);
 		$statement->execute();
-		$sql = "SELECT TOP 1 id FROM jobs where job_date = ? AND cost = ? AND type_id = ? AND address_id = ? AND client_id = ? ORDER BY id DESC";
+		$sql = "SELECT id FROM jobs where job_date = ? AND cost = ? AND type_id = ? AND address_id = ? AND client_id = ? ORDER BY id DESC LIMIT 1";
 		$statement = $this->conn->prepare($sql);
 		$statement->bindParam(1, $date);
 		$statement->bindParam(2, $cost);

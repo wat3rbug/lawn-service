@@ -9,6 +9,6 @@ $client = $_POST['client'];
 if (isset($address) && $address > 0 && isset($type) && $type > 0 && isset($cost) && $cost > 0.0) {
 	$db = new Job();
 	$id = $db->addJob($date, $cost, $type, $address, $client);
-	echo $d;
+	echo $id[0]['id'];
 }
 ?>

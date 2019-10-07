@@ -157,6 +157,7 @@ $(document).ready(function() {
 		type: "get",
 		success: function(data) {
 			if (data != null) {
+				$('#clients').find('tbody tr').remove();
 				data.forEach(function(client) {
 					var message = "<tr><td>" + client.firstName + "</td><td>" + client.lastName + "</td><td>";
 	 				message += client.phone + "</td><td>" + client.email + "</td><td>";
@@ -166,7 +167,7 @@ $(document).ready(function() {
 					message += " class='btn btn-outline-danger' id='removeClient' data-toggle='tooltip' title='Remove client'";
 					message += " onclick='removeClient(" + client.id + ")'><span class='glyphicon glyphicon-remove'></span>";
 					message += "</td></tr>\n";
-	 				$('#clients tr:last').after(message);
+	 				$('#clients').append(message);
 				});
 			}		
 		}

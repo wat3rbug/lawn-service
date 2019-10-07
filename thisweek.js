@@ -1,12 +1,20 @@
 function buildTable() {
+	var start = new Date();
+	beginning= dashDateFromLong(start);
+	var end = dashDateFromLong(start.addDays(7));
 	$.ajax({
-		url: "getAllJobs.php",
+		url: "getAllJobsBetweenDates.php",
 		dataType: "json",
 		type: "get",
+		data: {
+			"beginning": beginning,
+			"end": end
+		},
 		success: function(result) {
 			if (result != null) {
+				$('#clients').find('tbody tr').remove();
 				result.forEach(function(job) {
-					var row = "<tr><td>" + convertDashDateToSpace(job.job_date) + "</td><td>$";
+					var row = "<tr><td>" + spaceDate(job.job_date) + "</td><td>$";
 					var currentCost = parseFloat(job.cost).toFixed(2);
 					row += currentCost + "</td><td>";
 					if (job.type != "mow") {
@@ -20,41 +28,20 @@ function buildTable() {
 					row += "<td><button type='button' class='btn btn-outline-primary' ";
 					row += "onclick='getAddressInfo(" + job.address_id + ")'>" + job.address1 + "</button></td>";
 					row += "<td><div class='form-check'><input type='checkbox' class='form-check-input' ";
-					row += "onclick='complete(" + job.id + ")' value='" + job.complete + "'></div></td>";
+					row += "onclick='complete(" + job.id + ")'";
+					if (job.complete == "1") row += " checked";
+					row += "></div></td>";
 					row += "<td><button type='button' class='btn btn-outline-warning' onclick='editJob(";
 					row += job.id + ")'><span class='glyphicon glyphicon-pencil'></span></button>&nbsp;";
 					row += "<button type='button' class='btn btn-outline-danger' onclick='removeJob(";
 					row += job.id + ")'><span class='glyphicon glyphicon-remove'></span></td></tr>";
-					$('#clients tr:last').after(row);
+					$('#clients').append(row);
 				});
 			}
 		}
 	});
 }
 
-function editJob(id) {
-	$.ajax({
-		url: "getJobForId.php",
-		dataType: "json",
-		type: "post",
-		data: {
-			"id": id
-		},
-		success: function(result) {
-			if (result != null) {
-				$('#editJobModal').modal('show');
-				result.forEach(function(job) {
-					$('#editJob').val(job.id);
-					$('#editJobDate').val(job.job_date);
-					$('#editCost').val(parseFloat(job.cost).toFixed(2));
-					$('#editJobType').val(job.type_id);
-					$('#editClient').val(job.client_id);
-					$('#editAddress').val(job.address_id);
-				});
-			}		
-		}
-	});
-}
 
 function removeJob(id) {
 
@@ -68,7 +55,7 @@ function removeJob(id) {
 		success: function(result) {
 			if (result != null) {
 				result.forEach(function (job) {
-					var jobDate = convertDashDateToSpace(job.job_date);
+					var jobDate = spaceDate(job.job_date);
 					var message = "Remove the job for " + job.firstName + " at ";
 					message += job.address1 + " on " + jobDate + ".";
 					$('#rmJobMsg').text(message);
@@ -89,8 +76,29 @@ function complete(id) {
 		}
 	})
 }
+Date.prototype.addDays = function(days) {
+	var date = new Date(this.valueOf());
+	date.setDate(date.getDate() + days);
+	return date;
+}
 
-function convertDashDateToSpace(currentDate) {
+function dashDateFromLong(currentDate) {
+	var year = currentDate.getFullYear();
+	var month = currentDate.getMonth() + 1;
+	var day = currentDate.getDate();
+	return year + "-" + month + "-" + day;
+}
+
+function reverseDate(currentDate) {
+	var months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+	var dateSection = currentDate.split('-');
+	var day = dateSection[2];
+	var month = months.indexOf(dateSection[1].toLowerCase()) + 1;
+	var year = dateSection[0];
+	return day + "-" + month + "-" + year;
+}
+
+function spaceDate(currentDate) {
 	var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 	var dateSection = currentDate.split('-');
 	var day = dateSection[2];
@@ -99,7 +107,7 @@ function convertDashDateToSpace(currentDate) {
 	return day + " " + month + " " + year;
 }
 
-function parseDate(input) {
+function colonDate(input) {
 	var months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
 	var dateSection = input.split('-');
 	var day = dateSection[0];
@@ -155,83 +163,56 @@ function getClientInfo(id) {
 	});
 }
 
-function setupDropDowns() {
+function getAllTypes(selector) {
 	
 	$.ajax({
 		url: "getAllTypes.php",
 		dataType: "json",
 		success: function (data) {
 			if (data != null) {
-				$('#editJobType').empty();
-				$('#addJobType').empty();
+				selector.empty();
 				data.forEach(function (type) {
-					$('#editJobType').append($('<option>').text(type.type).val(type.id));
-					$('#addJobType').append($('<option>').text(type.type).val(type.id));
+					selector.append($('<option>').text(type.type).val(type.id));
 				});
 			}
-			getAllClients();
 		}	
 	});
 	
 }
 
-function getAllClients() {
+function getAllClients(selector) {
 	$.ajax({
 		url: "getAllClients.php",
 		dataType: "json",
 		success: function (data) {
 			if (data != null) {
-				$('#editClient').empty();
-				$('#addClient').empty();
+				selector.empty();
 				data.forEach(function (client) {
 					var cname = client.firstName + " " + client.lastName;
-					$('#editClient').append($('<option>').text(cname).val(client.id));
-					$('#addClient').append($('<option>').text(cname).val(client.id));
+					selector.append($('<option>').text(cname).val(client.id));
 				});
 			}
-			getAllAddresses();
 		}	
 	});	
 }
 
-function getAllAddresses() {
+function getAllAddresses(selector) {
 	$.ajax({
 		url: "getAllAddresses.php",
 		dataType: "json",
 		success: function (data) {
 			if (data != null) {
-				$('#editAddressSelector').empty();
-				$('#addAddressSelector').empty();
+				selector.empty();
 				data.forEach(function (address) {
-					var address = address.address1;
-
-					$('#editAddressSelector').append($('<option>').text(address).val(address.id));
-					$('#addAddressSelector').append($('<option>').text(address).val(address.id));
+					selector.append($('<option>').text(address.address1).val(address.id));
 				});
 			}
 		}	
 	});
 }
 
-function clearEditModal() {
-	$('#editShowDate').val();
-	$('#editCost').val();
-	$('#editJobType').val();
-	$('#editClient').val();
-	$('#editAddressSelector').val();
-}
-
-function clearAddModal() {
-	$('#addShowDate').val();
-	$('#cost').val();
-	$('#addJobType').val();
-	$('#addClient').val();
-	$('#addAddressSelector').val();
-}
-
 $(document).ready(function() {
 	
-	setupDropDowns();
 	buildTable();
 	
 	// Remove Job section
@@ -241,73 +222,8 @@ $(document).ready(function() {
 		$('#rmJobId').val();
 		$('#successRemoveJob').modal('hide');
 	});
-	
-	// Edit Job section
-	
-	$('#cancelEditJobBtn').on("click", function() {
-		$('#editJobModal').modal('hide');	
-	});
-	
-	$('#pushEditJobDB').on("click", function() {
-		var editDate = $('#editJobDate').val();
-		var editCost = $('#editCost').val();
-		var editJobType = $('#editJobType').val();
-		var editClient = $('#editClient').val();
-		var editAddress = $('#editAddressSelector').val();
-		var editJobId = $('#editJob').val();
-		$.ajax({
-			url: "editJob.php",
-			type: "post",
-			data: {
-				"id": editJobId,
-				"address": editAddress,
-				"client": editClient,
-				"jobType": editJobType,
-				"cost": editCost,
-				"editDate": editDate
-			},
-			success: function() {
-				$('#editJobModal').modal('hide');
-				clearEditModal();
-				window.parent.window.location.reload();
-			}	
-		});
-	});
-	
-	// Add Job section
-	
-	$('#pushJobDB').on("click", function() {
-		var currentDate = $('#addShowDate').val();
-		var cost = $('#cost').val();
-		var jobType = $('#addJobType').val();
-		var clientId = $('#addClient').val();
-		var addressId = $('#addAddressSelector').val();
-		$.ajax({
-			url: "addJob.php",
-			type: "post",
-			data: {
-				"date": currentDate,
-				"cost": cost,
-				"jobType": jobType,
-				"client": clientId,
-				"address": addressId
-			},
-			succcess: function(id) {
-				$('#addJobModal').modal('hide');
-				if (jobType != "1" && id != 0) {
-					$('#addBillingModal').modal('show');
-					$('#addBillingJobId').val(id);
-				}
-			}	
-		});
-	});
-	
+
 	// modal non-database buttons
-	
-	$('#rmSuccessBtn').on('click', function() {
-		$('#successRemoveJob').modal('hide');
-		window.parent.window.location.reload();
-	});
 
 	$('#closeClientInfoBtn').on("click", function() {
 		$('#showClientInfoModal').modal('hide');	
@@ -317,14 +233,6 @@ $(document).ready(function() {
 		$('#showAddressInfoModal').modal('hide');	
 	});
 	
-	$('#addJobBtn').on("click", function() {
- 		$('#addJobModal').modal('show');
-	});
-	
-
-	
-	// database calls
-		
 	
 	
 	$('#rmSuccessBtn').on("click", function() {
@@ -338,28 +246,6 @@ $(document).ready(function() {
 			success: function() {
 				window.parent.window.location.reload();
 			}
-		});
-	});
-	
-	$('#pushJobDB').on("click", function() {
-		var origDate = $('#addJobDate').val();
-		var currentDate = parseDate(origDate);		
-		var cost = $('#cost').val();
-		var jobType = $('#addJobType').val();
-		var address = $('#addressSelector').val();
-		$.ajax({
-			url: "addJob.php",	
-			type: "post",
-			data: {
-				"jobDate": currentDate,
-				"cost": cost,
-				"jobType": jobType,
-				"address": address
-			},
-			success: function() {
-				$('#addJobModal').modal('hide');
-				$('successAddJob').modal('show');
-			}	
 		});
 	});
 });

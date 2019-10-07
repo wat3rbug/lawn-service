@@ -94,7 +94,9 @@ create table clients (
 
 create table types (
 	id int auto_increment primary key,
-	type varchar(20) not null
+	type varchar(20) not null,
+	deleted tinyint(1) not null default 0,
+	uses_materials tinyint(1) not null default 0
 ) engine = InnoDB;
 insert into types (type) values ("mow");
 insert into types (type) values ("mulch");
@@ -133,3 +135,20 @@ create table mowers (
 	
 ) engine = InnoDB; 
 
+create trigger after_billing_delete
+	after delete on billing
+	for each row
+	update jobs set cost = (select sum(cost * quantity) from billing
+		where deleted = 0 and billing.job_id = OLD.job_id) where jobs.id = OLD.job_id;
+
+create trigger after_billing_update 
+	after update on billing 
+	for each row 
+	update jobs set cost =(select sum(cost * quantity) from billing 
+		where deleted = 0  and billing.job_id = OLD.job_id) where jobs.id = OLD.job_id;
+		
+create trigger after_billing_insert
+	after insert on billing 
+	for each row 
+	update jobs set cost =(select sum(cost * quantity) from billing 
+		where deleted = 0  and billing.job_id = NEW.job_id) where jobs.id = NEW.job_id;

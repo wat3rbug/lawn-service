@@ -22,8 +22,49 @@ class Type {
 		}
 	}
 	
+	function editJobType($id, $type) {
+		if (isset($id) && $id >0 && isset($type)) {
+			$sql = "UPDATE types set type = ? WHERE id = ?";
+			$statement = $this->conn->prepare($sql);
+			$statement->bindParam(1, $type);
+			$statement->bindParam(2, $id);
+			$statement->execute();
+		}
+	}
+	
+	function removeJobType($id) {
+		if (isset($id) && $id > 0) {
+			$sql = "UPDATE types SET deleted = 1 WHERE id = ?";
+			$statement = $this->conn->prepare($sql);
+			$statement->bindParam(1, $id);
+			$statement->execute();
+		}
+	}
+	
+	function addJobType($type) {
+		if (isset($type)) {
+			$sql = "INSERT INTO types SET type= ?";
+			$statement = $this->conn->prepare($sql);
+			$statement->bindParam(1, $type);
+			$statement->execute();
+		}
+	}
+	
+	function getJobTypeById($id) {
+		if (isset($id) && $id > 0) {
+			$sql = "SELECT * FROM types WHERE id = ? AND deleted = 0";
+			$statement = $this->conn->prepare($sql);
+			$statement->bindParam(1, $id);
+			$statement->execute();
+			while ($row = $statement->fetch()) {
+				$output[] = $row;
+			}
+			return $output;
+		}
+	}
+	
 	function getAllTypes() {
-		$sql = "SELECT * from types";
+		$sql = "SELECT * from types WHERE deleted = 0";
 		$statement = $this->conn->query($sql);
 		while ($row = $statement->fetch()) {
 			$output[] = $row;

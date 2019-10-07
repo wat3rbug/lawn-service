@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charsset="utf-8">
+	<title>The Lawn Service</title>
+	
+	<!-- Bootstrap Library -->
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
+</head>
+<body>
+	<!-- Bootstrap scripts -->
+	
+	
+	<!-- JQuery library -->
+	<script src="jquery-3.3.1.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="sidebar.js"></script>
+	<script src="jobtypes.js"></script>
+
+	
+	<div class="col-sm-12">
+		<div class="jumbotron info">
+			<h1>The Lawn Service</h1>We like to mow it, mow it...
+		</div>
+	</div>
+	<div class="row">&nbsp;</div>
+	<div class="col-lg-12">
+		<div class="row">
+			
+			<!-- Side bar is built here -->
+			
+			<div class="col-sm-2" id="sidebar">
+				
+			</div>
+			<div class="col-sm-9">
+				<p><h4>Types of jobs</h4></p>			
+				<button type="button" class="btn btn-success" id="addTypeBtn">
+					<span class="glyphicon glyphicon-plus"></span>&nbsp;Add Job Type
+				</button>
+				<div class="row">&nbsp;</div>
+				<div class="panel panel-info">
+					<div class="panel-body">
+						<table class="table table-striped" id="jobtypes">
+							<thead class="thead-dark">
+								<th scope="col">Job Type</th>
+								<th scope="col">Action</th>								
+							</thead>
+							<tbody></tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+<!-- Remove JobType Section -->
+
+<div class="modal" id="successRemoveJobType" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header d-block alert-danger">
+				<h5 class="modal-title text-center">Remove Job</h5>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<input type="hidden" id="rmJobId">
+					<div class="col-sm-12 text-center" id="rmJobMsg"></div>
+				</div>
+			</div>
+			<div class="modal-footer text-right">
+				<button type="button" class="btn btn-danger" id="rmSuccessBtn">
+					<span class="glyphicon glyphicon-ok"></span>&nbsp;Ok
+				</button>&nbsp;
+				<button type="button" class="btn btn-default" id="rmSuccessCancelBtn">
+					<span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Cancel
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+ <!-- Edit Job Type Section -->
+
+<div class="modal fade" id="editJobTypeModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header d-block alert-warning">
+				<h5 class="modal-title text-center">Edit Job Type</h5>
+			</div>
+			<div class="modal-body">
+				<input type="hidden" id="hdnEditJob">
+				<div class="row">
+					<div class="col-sm-6 text-right">Type</div>
+					<div class="col-sm-6">
+						<input type="text" class="form-control" id="editJobType">
+					</div>
+				</div>			
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-warning" id="pushEditJobTypeDB">
+					<span class="glyphicon glyphicon-cloud-upload"></span>&nbsp;Update
+				</button>&nbsp;
+				<button type="button" class="btn btn-default" id="cancelEditJobBtn">
+					<span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Cancel
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+ <!-- Add Job Type Section -->
+
+<div class="modal fade" id="addJobTypeModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header d-block alert-success">
+				<h5 class="modal-title text-center">Add Job Type</h5>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-sm-6 text-right">Type</div>
+					<div class="col-sm-6">
+						<input type="text" class="form-control" id="addJobType">
+					</div>
+				</div>			
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" id="pushJobTypeDB">
+					<span class="glyphicon glyphicon-cloud-upload"></span>&nbsp;Complete
+				</button>&nbsp;
+				<button type="button" class="btn btn-default" id="cancelJobTypeBtn">
+					<span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Cancel
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+</html>

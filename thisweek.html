@@ -18,6 +18,8 @@
 	<script src="sidebar.js"></script>
 	<script src="thisweek.js"></script>
 	<script src="billing.js"></script>
+	<script src="editjobs.js"></script>
+	<script src="addjob.js"></script>
 
 	
 	<div class="col-sm-12">
@@ -51,7 +53,7 @@
 								<th scope="col">Location</th>
 								<th scope="col">Complete</th>
 								<th scope="col">Action</th>								
-							</th>
+							</thead>
 							<tbody></tbody>
 						</table>
 					</div>
@@ -96,7 +98,7 @@
 				<h5 class="modal-title text-center">Edit Job</h5>
 			</div>
 			<div class="modal-body">
-				<input type="hidden" id="editJob">
+				<input type="hidden" id="hdnEditJob">
 				<div class="row">
 					<div class="col-sm-6 text-right">Date</div>
 					<div class="col-sm-6">
@@ -231,6 +233,8 @@
 	</div>
 </div>
 
+<!-- Display client information Modal  -->
+
 <div class="modal fade" id="showClientInfoModal" tabindex="-1" role="dialog">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
@@ -262,6 +266,8 @@
 		</div>
 	</div>
 </div>
+
+<!-- Display Job Address information Modal -->
 
 <div class="modal fade" id="showAddressInfoModal" tabindex="-1" role="dialog">
 	<div class="modal-dialog" role="document">
@@ -371,6 +377,58 @@
 	</div>
 </div>	
 
+<!-- Add Billing Item modal that supports Add Job Modal -->
+
+<div class="modal fade" id="addBillingItemModalForAddJob" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header d-block alert-success">
+				<h5 class="modal-title text-center">Add Billing Item</h5>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<input type="hidden" id="addBillingItemJobForAddJobId">
+					<div class="col-sm-6 text-right">Name</div>
+					<div class="col-sm-6">				
+						<input type="text" class="form-control" id="addBillingItemNameForAddJob">
+					</div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<div class="col-sm-6 text-right">Cost</div>
+					<div class="col-sm-3">
+						<div class="input-group input-group-sm mb-3">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="addBillingItemCostForAddJob">$</span>
+							</div>
+							<input type="text" class="form-control" aria-label="small" id="addBillingItemMoneyForAddJob" aria-describedby="addBillingItemCostForAddJob">
+						</div>
+					</div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<div class="col-sm-6 text-right">Quantity</div>
+					<div class="col-sm-3">
+						<div class="input-group input-group-sm mb-3">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="addBillingItemQuantityForAddJob">#</span>
+							</div>
+							<input type="text" class="form-control" aria-label="small" id="addBillingItemNumForAddJob" aria-describedby="addBillingItemQuantityForAddJob">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" id="addBillingItemBtnForAddJob">
+					<span class="glyphicon glyphicon-plus"></span>&nbsp;Add Billing Item
+				</button>&nbsp;
+				<button type="button" class="btn btn-default" id="addBillingItemCloseBtnForAddJob">
+					<span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Cancel
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 <!-- Add Billing Item modal -->
 
@@ -464,25 +522,4 @@
 		</div>
 	</div>
 </div>			
-		
-
-<div class="modal fade" id="successAddJob" tabindex="-1" role="dialog">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header d-block success">
-				<h5 class="modal-title text-center">Success</h5>
-			</div>
-			<div class="modal-body">
-				<div class="row">
-					<div class="col-sm-12" id="addJobMsg"></div>
-				</div>
-			</div>
-			<div class="modal-footer text-right">
-				<button type="button" class="btn btn-success" id="addSuccessBtn">
-					<span class="glyphicon glyphicon-ok"></span>&nbsp;Close
-				</button>
-			</div>
-		</div>
-	</div>
-</div>
 </html>

@@ -40,6 +40,33 @@ function removeBilling(billingId) {
 		}
 	});	
 }
+function getBillingForModal(table, id) {
+	$.ajax({
+		url: "getBillingForId.php",
+		type: "post",
+		dataType: "json",
+		data: {
+			"id": id
+		}, success: function(data, table) {
+			var total = 0;
+			table.find('tbody tr').remove();
+			if (data != null) {
+				data.forEach(function(billingItem) {
+					var lineCost = parseFloat(billingItem.cost) * parseInt(billingItem.quantity);
+					total += lineCost;
+					var row = "<tr><td class='text-left'>" + billingItem.item + "</td><td>$";
+					row += parseFloat(billingItem.cost).toFixed(2) + "</td><td>" +	billingItem.quantity;
+					row += "</td>><td><button type='button' class='btn btn-outline-warning' onclick='editNewBilling(";
+					row += billingItem.id + ")'><span class='glyphicon glyphicon-pencil'></span></button>";
+					row += "&nbsp;<button type='button' class='btn btn-outline-danger' onclick='removeNewBilling(";
+					row += billingItem.id + ")'><span class='glyphicon glyphicon-remove'></span></td>";
+					row += "<td>" + parseFloat(lineCost).toFixed(2) + "</td></tr>";
+					table.append(row);
+				});
+			}
+		}
+	})
+}
 
 function refreshEditBilling(id) {
 	$.ajax({
@@ -74,12 +101,20 @@ function refreshEditBilling(id) {
 	});
 }
 
+function backToAddJobBillingModal() {
+	
+	$('#addBillingItemModalForAddJob').modal('hide');
+	var id = $('#addBillingItemJobForAddJobId').val();
+	$('#addBillingModal').modal('show');
+	getBillingForModal($('#addBillingItems'), id);
+}
+
 $(document).ready(function() {
 	
 	// view Billing section
 	
 	$('#viewBillingCloseBtn').on("click", function() {
-		$('#viewBillingModal').modal("hide");	
+		$('#addJobModal').modal("hide");	
 	});
 	
 	$('#cancelJobBtn').on("click", function() {
@@ -101,6 +136,7 @@ $(document).ready(function() {
 		$('#editBillingModal').modal('hide');
 		$('#addBillingItemModal').modal('show');
 		$('#addBillingItemJobId').val(id);	
+		getBillingForModal($('#addBillingItems'), id);
 	});
 	
 	$('#clearEditBillingBtn').on("click", function() {
@@ -116,6 +152,41 @@ $(document).ready(function() {
 			}	
 		});
 	});
+	// add Billing Item section for Add Job
+	
+	$('#addBillingItem').on("click", function() {
+		var jobid = $('#addBillingItemJobForAddJobId').val();
+		$('#addBillingModal').modal('hide');
+		$('#addBillingItemModalForAddJob').modal('show');
+		$('#addBillingItemJobForAddJobId').val(jobid);
+		$('#addBillingItemNameForAddJob').val();
+		$('#addBillingItemMoneyForAddJob').val();
+		$('#addBillingItemNumForAddJob').val();	
+	});
+	
+	$('#addBillingItemBtnForAddJob').on("click", function() {
+		var id = $('#addBillingItemJobForAddJobId').val();
+		var item = $('#addBillingItemNameForAddJob').val();
+		var cost = $('#addBillingItemMoneyForAddJob').val();
+		var quantity = $('#addBillingItemNumForAddJob').val();
+		$.ajax({
+			url: "addBillingItem.php",
+			type: "post",
+			data: {
+				"id": id,
+				"item": item,
+				"cost": cost,
+				"quantity": quantity
+			}
+		})
+		backToAddJobBillingModal();
+	});
+	
+	$('#addBillingItemCloseBtnForAddJob').on("click", function() {
+		backToAddJobBillingModal();
+	});
+	
+	
 	
 	// add Billing Item section
 	
@@ -150,7 +221,7 @@ $(document).ready(function() {
 	});
 	
 	$('#editBillingBtn').on("click", function() {
-		var id = $('#editJob').val();
+		var id = $('#hdnEditJob').val();
 		$('#editBillingJobId').val(id);
 		$('#editJobModal').modal('hide');
 		$('#editBillingModal').modal('show');
