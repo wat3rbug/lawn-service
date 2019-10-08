@@ -5,6 +5,8 @@ drop table if exists `clients`;
 drop table if exists `types`;
 drop table if exists `addresses`;
 drop table if exists `states`;
+drop table if exists `expense_categories`;
+drop table if exists `expenses`;
 
 create table states (
 	postal_code varchar(2) primary key,
@@ -134,6 +136,23 @@ create table mowers (
 	user_hash varchar(256) 
 	
 ) engine = InnoDB; 
+
+create table expense_categories (
+	id int auto_increment primary key,
+	expense_type varchar(40) not null,
+	isDeleted tinyint(1) not null default 0
+) engine = InnoDB;
+
+create table expenses (
+	id int auto_increment primary key,
+	expense_date date not null,
+	name varchar(40) not null,
+	expense_category int not null,
+	foreign key fk_expense(expense_category) references expense_categories(id),
+	unit_cost decimal(10,2) not null,
+	quantity int not null default 1,
+	isDeleted tinyint(1) not null default 0
+) engine = InnoDB;
 
 create trigger after_billing_delete
 	after delete on billing
