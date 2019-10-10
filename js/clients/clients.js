@@ -2,25 +2,20 @@
 
 function removeClient(id) {
 	$.ajax({
-		url: "getClientNameForId.php",
+		url: "repos/removeClient.php",
 		type: "post",
-		dataType: "json",
 		data: {
 			"id": id
 		},
-		success: function(data) {
-			var client = data[0];
-			var message = client.firstName + " " + client.lastName + " will be removed";
-			$('#rmClientId').val(id);
-			$('#rmClientMsg').text(message);
-			$('#successRemoveClient').modal('show');
+		success: function() {
+			buildClientTable();
 		}	
 	});
 }
 
 function editClient(id) {
 	$.ajax({
-		url: "getClientNameForId.php",
+		url: "repos/getClientForId.php",
 		type: "post",
 		dataType: "json",
 		data: {
@@ -39,11 +34,6 @@ function editClient(id) {
 	});
 }
 
-function cleanRemoveModal() {
-	$('#rmClientId').val();
-	$('#rmClientMsg').text();
-}
-
 function cleanAddModal() {
 	$('#firstName').val();
 	$('#lastName').val();
@@ -55,6 +45,8 @@ function cleanAddModal() {
 $(document).ready(function() {
 	
 	// Add client section
+	
+	buildClientTable();
 	
 	$('#addClientBtn').on("click", function() {
 		$('#addClientModal').modal('show');	
@@ -71,7 +63,7 @@ $(document).ready(function() {
 		var phone = $('#phone').val();
 		var billing = $('#addAddressSelector').val();
 		$.ajax({
-			url: "addClient.php",
+			url: "repos/addClient.php",
 			type: "post",
 			data: {
 				"firstname": firstName,
@@ -111,7 +103,7 @@ $(document).ready(function() {
 		var email = $('#editEmail').val();
 		var billing = $('#addressEditSelector').val();
 		$.ajax({
-			url: "editClient.php",
+			url: "repos/editClient.php",
 			type: "post",
 			data: {
 				"id": id,
@@ -137,7 +129,7 @@ $(document).ready(function() {
 	$('#rmSuccessBtn').on("click", function() {
 		var id = $('#rmClientId').val();
 		$.ajax({
-			url: "removeClient.php",
+			url: "repos/removeClient.php",
 			type: "post",
 			data: {
 				"id": id
@@ -151,30 +143,10 @@ $(document).ready(function() {
 	
 	// setup table of clients
 	
-	$.ajax({	
-		url: "getAllClients.php",
-		dataType: "json",
-		type: "get",
-		success: function(data) {
-			if (data != null) {
-				$('#clients').find('tbody tr').remove();
-				data.forEach(function(client) {
-					var message = "<tr><td>" + client.firstName + "</td><td>" + client.lastName + "</td><td>";
-	 				message += client.phone + "</td><td>" + client.email + "</td><td>";
-	 				message += "<button type='button' class='btn btn-outline-warning' id='editClient' ";
-					message += "onclick='editClient(" + client.id +")' data-toggle='tooltip' title='Edit client information'>";
-					message += "<span class='glyphicon glyphicon-pencil'></span></button>&nbsp;<button type='button'";
-					message += " class='btn btn-outline-danger' id='removeClient' data-toggle='tooltip' title='Remove client'";
-					message += " onclick='removeClient(" + client.id + ")'><span class='glyphicon glyphicon-remove'></span>";
-					message += "</td></tr>\n";
-	 				$('#clients').append(message);
-				});
-			}		
-		}
-	});
+	
 	
 	$.ajax({
-		url: "getAllAddresses.php",
+		url: "repos/getAllAddresses.php",
 		type: "get",
 		datatype: "json",
 		success: function(data) {
@@ -195,3 +167,28 @@ $(document).ready(function() {
 		}	
 	});
 });
+
+function buildClientTable() {
+	
+	$.ajax({	
+		url: "repos/getAllClients.php",
+		dataType: "json",
+		type: "get",
+		success: function(data) {
+			if (data != null) {
+				$('#clients').find('tbody tr').remove();
+				data.forEach(function(client) {
+					var message = "<tr><td>" + client.firstName + "</td><td>" + client.lastName + "</td><td>";
+	 				message += client.phone + "</td><td>" + client.email + "</td><td>";
+	 				message += "<button type='button' class='btn btn-outline-warning' ";
+					message += "onclick='editClient(" + client.id +")'>";
+					message += "<span class='glyphicon glyphicon-pencil'></span></button>&nbsp;<button type='button'";
+					message += " class='btn btn-outline-danger' onclick='removeClient(" + client.id;
+					message += ")'><span class='glyphicon glyphicon-remove'></span>";
+					message += "</td></tr>\n";
+	 				$('#clients').append(message);
+				});
+			}		
+		}
+	});
+}

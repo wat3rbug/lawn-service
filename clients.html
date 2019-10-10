@@ -9,8 +9,11 @@
 <body>
 	<script src="jquery-3.3.1.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+	
 	<script src="sidebar.js"></script>
-	<script src="clients.js"></script>
+	<script src="js/clients/clients.js"></script>
 	
 	<div class="col-sm-12">
 		<div class="jumbotron info">
@@ -117,32 +120,6 @@
 			<div class="modal-footer text-right">
 				<button type="button" class="btn btn-success" id="addSuccessBtn">
 					<span class="glyphicon glyphicon-ok"></span>&nbsp;Close
-				</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- Remove Client Section -->
-
-<div class="modal" id="successRemoveClient" tabindex="-1" role="dialog">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header d-block alert-danger">
-				<h5 class="modal-title text-center">Remove Client</h5>
-			</div>
-			<div class="modal-body">
-				<div class="row">
-					<input type="hidden" id="rmClientId">
-					<div class="col-sm-12 text-center" id="rmClientMsg"></div>
-				</div>
-			</div>
-			<div class="modal-footer text-right">
-				<button type="button" class="btn btn-danger" id="rmSuccessBtn">
-					<span class="glyphicon glyphicon-ok"></span>&nbsp;Ok
-				</button>&nbsp;
-				<button type="button" class="btn btn-default" id="rmSuccessCancelBtn">
-					<span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Cancel
 				</button>
 			</div>
 		</div>

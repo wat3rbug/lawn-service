@@ -7,7 +7,7 @@ $(document).ready(function() {
 	$('#addCatBtn').on("click", function() {
 		var name = $('#catName').val();
 		$.ajax({
-			url: "php_repos/addExpenseCategory.php",
+			url: "repos/addExpenseCategory.php",
 			type: "post",
 			data: {
 				"name": name
@@ -34,7 +34,8 @@ $(document).ready(function() {
 	});
 	
 	$('#addExpenseDate').datepicker({
-		format: 'dd-m-yyyy'
+		format: 'dd-m-yyyy', 
+		autoclose: true
 	});
 	
 	$('#pushExpenseDB').on("click", function() {
@@ -45,7 +46,7 @@ $(document).ready(function() {
 		var unitCost = parseFloat($('#addUnitCost').val()).toFixed(2);
 		var currentDate = dashDateFromLong(current);
 		$.ajax({
-			url: "php_repos/addExpense.php",
+			url: "repos/addExpense.php",
 			dataType: "json",
 			type: "post",
 			data: {
@@ -79,7 +80,7 @@ $(document).ready(function() {
 		var unitCost = parseFloat($('#editUnitCost').val()).toFixed(2);
 		var currentDate = dashDateFromLong(current);
 		$.ajax({
-			url: "php_repos/editExpense.php",
+			url: "repos/editExpense.php",
 			type: "post",
 			data: {
 				"id": id,
@@ -92,8 +93,8 @@ $(document).ready(function() {
 			},
 			success: function() {
 				$('#editExpenseModal').modal('hide');
-				window.parent.window.location.reload();
-				//buildExpenseTable(); //its now doubling rows  WTF!
+				//window.parent.window.location.reload();
+				buildExpenseTable(); //its now doubling rows  WTF!
 			}
 		});		
 	});
@@ -113,7 +114,7 @@ function clearAddExpenseModal() {
 
 function buildCatList(selector) {
 	$.ajax({
-		url: "php_repos/getAllExpenseCategories.php",
+		url: "repos/getAllExpenseCategories.php",
 		dataType: "json",
 		success: function(result) {
 			selector.empty();
@@ -129,17 +130,17 @@ function buildCatList(selector) {
 
 function buildExpenseTable() {
 	$.ajax({
-		url: "php_repos/getAllExpenses.php",
+		url: "repos/getAllExpenses.php",
 		dataType: "json",
 		success: function(result) {
-			$('#expenses tbody').remove();
+			$('#expenses').find('tbody tr').remove();
 			if (result != null) {
 				result.forEach(function(expense) {
 					var lineCost = parseFloat(expense.unit_cost * expense.quantity).toFixed(2);
 					var date = getWebDateFromDBDate(expense.expense_date);
 					var row = "<tr><td>" + date + "</td><td>" + expense.name + "</td>";
 					row += "<td>" + expense.expense_type + "</td><td>$" + expense.unit_cost + "</td>";
-					row += "<td>" + expense.quantity + "</td><td>$" + lineCost + "</td><td>";
+					row += "<td>" + expense.quantity + "</td><td>$" + lineCost + "</td><td class='text-right'>";
 					row += "<button type='button' class='btn btn-outline-warning' onclick='editExpense(";
 					row += expense.id + ")'><span class='glyphicon glyphicon-pencil'></span></button>&nbsp;";
 					row +="<button type='button' class='btn btn-outline-danger' onclick='removeExpense(";
@@ -155,7 +156,7 @@ function editExpense(id) {
 	buildCatList($('#editCategorySelector'));
 	$('#editExpenseModal').modal('show');
 	$.ajax({
-		url: "php_repos/getExpenseById.php",
+		url: "repos/getExpenseById.php",
 		dataType: "json",
 		type: "get",
 		data: {
@@ -180,10 +181,10 @@ function editExpense(id) {
 function buildCategoryTable() {
 	
     $.ajax({
-   		url: "php_repos/getAllExpenseCategories.php",
+   		url: "repos/getAllExpenseCategories.php",
    	 	dataType: "json", 
 		success: function(result) {
-			$('#categories tbody tr').remove();
+			$('#categories').find('tbody tr').remove();
 			if (result != null) {
 				result.forEach(function(category) {
 					var row = "<tr><td>" + category.expense_type + "</td><td class='text-right'>";
@@ -198,21 +199,21 @@ function buildCategoryTable() {
 }
 function removeExpense(id) {
 	$.ajax({
-		url: "php_repos/removeExpense.php",
+		url: "repos/removeExpense.php",
 		type: "post",
 		data: {
 			"id": id
 		},
 		success: function() {
-			window.parent.window.location.reload();
-			//buildExpenseTable();  WTH is it doubling rows now!
+			//window.parent.window.location.reload();
+			buildExpenseTable();  //WTH is it doubling rows now!
 		}
 	});
 }
 
 function removeRow(id) {
 	$.ajax({
-		url: "php_repos/removeCategoryById.php",
+		url: "repos/removeCategoryById.php",
 		type: "post",
 		data: {
 			"id": id

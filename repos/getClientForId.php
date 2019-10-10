@@ -1,5 +1,5 @@
 <?php
-require "Client.php";
+require "Tables/Client.php";
 $id = $_POST['id'];
 
 if (isset($id) && $id > 0) {

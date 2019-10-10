@@ -1,5 +1,5 @@
 <?php
-require "Client.php";
+require "Tables/Client.php";
 $id = $_POST['id'];
 $firstname = $_POST['firstName'];
 $lastname = $_POST['lastName'];

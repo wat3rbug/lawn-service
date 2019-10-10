@@ -1,5 +1,5 @@
 <?php
-require "Client.php";
+require "Tables/Client.php";
 $db = new Client();
 $data = $db->getAllClients();
 header('Content-type: application/json');
