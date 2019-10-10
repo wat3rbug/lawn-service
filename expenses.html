@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charsset="utf-8">
+	<title>The Lawn Service</title>
+	
+	<!-- Bootstrap Library -->
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
+</head>
+<body>
+	<!-- Bootstrap scripts -->
+	
+	
+	<!-- JQuery library -->
+	<script src="jquery-3.3.1.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+	
+	<!-- page specific stuff -->
+	<script src="sidebar.js"></script>
+	<script src="js/expenses/expenses.js"></script>
+	<script src="js/dbfunctions.js"></script>
+
+	
+	<div class="col-sm-12">
+		<div class="jumbotron info">
+			<h1>The Lawn Service</h1>We like to mow it, mow it...
+		</div>
+	</div>
+	<div class="row">&nbsp;</div>
+	<div class="col-lg-12">
+		<div class="row">
+			
+			<!-- Side bar is built here -->
+			
+			<div class="col-sm-2" id="sidebar">
+				
+			</div>
+			<div class="col-sm-7">
+				<p><h4>Expenses</h4></p>			
+				<button type="button" class="btn btn-success" id="addExpenseBtn">
+					<span class="glyphicon glyphicon-plus"></span>&nbsp;Add New Expense
+				</button>
+				<div class="row">&nbsp;</div>
+				<div class="panel panel-info">
+					<div class="panel-body">
+						<table class="table table-striped" id="expenses">
+							<thead class="thead-dark">
+								<th scope="col">Date</th>
+								<th scope="col">Name</th>
+								<th scope="col">Category</th>
+								<th scope="col">Unit Cost</th>
+								<th scope="col">Quantity</th>
+								<th scope="col">Total Cost</th>	
+								<th scope="col">Action</th>							
+							</thead>
+							<tbody></tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-2">
+				<div class="panel panel-info">
+					<div class="panel-heading text-center">Expense Categories</div>
+					<div class="panel-body">
+						<table class="table table-striped" id="categories">
+							<thead class="thead-light">
+								<th scope="col">Category</th>
+								<th scope="col" class="text-right">Action</th>
+							</thead>
+							<tbody>
+							</tbody>
+							<tfoot>
+								<tr>
+									<td><input type="text" id="catName"></td>
+									<td class="text-right">
+										<button type="button" class="btn btn-success" id="addCatBtn">
+											<span class="glyphicon glyphicon-plus"></span>&nbsp;Add Category
+										</button>
+									</td>
+								</tr>
+							</tfoot>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+<!-- Add Expense Modal -->
+
+<div class="modal" id="addExpenseModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header d-block alert-success">
+				<h5 class="modal-title text-center">Add Expense</h5>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-sm-6 text-right">Name</div>
+					<div class="col-sm-6"><input id="addName"></div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<div class="col-sm-6 text-right">Quantity</div>
+					<div class="col-sm-6"><input id="addQuantity"></div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<div class="col-sm-6 text-right">Unit Cost</div>
+					<div class="col-sm-6">
+						<div class="input-group mb-3">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="addUnitCostAddon">$</span>
+							</div>
+							<input class="form-control" type="number" id="addUnitCost" ariadescribedby="addUnitCostAddon">
+						</div>
+					</div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<div class="col-sm-6 text-right">Category</div>
+					<div class="col-sm-6">
+						<select class="browser-default custom-select" id="addCategorySelector">
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" id="pushExpenseDB">
+					<span class="glyphicon glyphicon-cloud-upload"></span>&nbsp;Complete
+				</button>&nbsp;
+				<button type="button" class="btn btn-default" id="addExpenseCancelBtn">
+					<span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Cancel
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Edit Expense Modal -->
+<div class="modal" id="editExpenseModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header d-block alert-warning">
+				<h5 class="modal-title text-center">Edit Expense</h5>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-sm-6 text-right">Name</div>
+					<div class="col-sm-6"><input id="editName"><input type="hidden" id="editExpenseId"></div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<div class="col-sm-6 text-right">Date</div>
+					<div class="col-sm-4">
+						<div class="form-group">
+							<div class="input-group date" id="editExpenseDate">	
+								
+								<span class="input-group-addon">							
+									<span class="glyphicon glyphicon-calendar"></span>
+								</span>
+								<input type="text" class="form-control"/>
+							</div>							
+						</div>
+					</div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<div class="col-sm-6 text-right">Quantity</div>
+					<div class="col-sm-4"><input id="editQuantity"></div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<div class="col-sm-6 text-right">Unit Cost</div>
+					<div class="col-sm-4">
+						<div class="input-group mb-3">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="editUnitCostAddon">$</span>
+							</div>
+							<input class="form-control" type="number" id="editUnitCost" ariadescribedby="editUnitCostAddon">
+						</div>
+					</div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class="row">
+					<div class="col-sm-6 text-right">Category</div>
+					<div class="col-sm-5">
+						<select class="browser-default custom-select" id="editCategorySelector">
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-warning" id="pushExpenseDB">
+					<span class="glyphicon glyphicon-cloud-upload"></span>&nbsp;Update
+				</button>&nbsp;
+				<button type="button" class="btn btn-default" id="editExpenseCancelBtn">
+					<span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Cancel
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+</html>
