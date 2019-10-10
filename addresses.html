@@ -9,8 +9,13 @@
 <body>
 	<script src="jquery-3.3.1.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+	
 	<script src="sidebar.js"></script>
-	<script src="addresses.js"></script>
+	<script src="js/clients/clients.js"></script>
+	<script src="sidebar.js"></script>
+	<script src="js/addresses/addresses.js"></script>
 	
 	<div class="col-sm-12">
 		<div class="jumbotron info">
@@ -51,32 +56,6 @@
 		</div>
 	</div>
 </body>
-
-<!-- Remove Address Section -->
-
-<div class="modal" id="successRemoveAddress" tabindex="-1" role="dialog">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header d-block alert-danger">
-				<h5 class="modal-title text-center">Remove Address</h5>
-			</div>
-			<div class="modal-body">
-				<div class="row">
-					<input type="hidden" id="rmAddressId">
-					<div class="col-sm-12 text-center" id="rmAddressMsg"></div>
-				</div>
-			</div>
-			<div class="modal-footer text-right">
-				<button type="button" class="btn btn-danger" id="rmSuccessBtn">
-					<span class="glyphicon glyphicon-ok"></span>&nbsp;Ok
-				</button>&nbsp;
-				<button type="button" class="btn btn-default" id="rmSuccessCancelBtn">
-					<span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Cancel
-				</button>
-			</div>
-		</div>
-	</div>
-</div>
 
 <!-- Edit Address Section -->
 

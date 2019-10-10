@@ -1,5 +1,5 @@
 <?php
-require "Address.php";
+require "Tables/Address.php";
 $db = new Address();
 $id = $_POST['id'];
 

@@ -1,5 +1,5 @@
 <?php
-require "Address.php";
+require "Tables/Address.php";
 $id = $_POST['id'];
 
 if (isset($id) && $id > 0) {

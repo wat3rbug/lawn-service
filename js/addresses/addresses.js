@@ -2,25 +2,20 @@
 
 function removeAddress(id) {
 	$.ajax({
-		url: "getAddressForId.php",
+		url: "repos/removeAddress.php",
 		type: "post",
-		dataType: "json",
 		data: {
 			"id": id
 		},
-		success: function(data) {
-			var address = data[0];
-			var message = address.address1 + " " + address.address2 + " will be removed";
-			$('#rmAddressId').val(id);
-			$('#rmAddressMsg').text(message);
-			$('#successRemoveAddress').modal('show');
+		success: function() {
+			buildAddressTable();
 		}	
 	});
 }
 
 function editAddress(id) {
 	$.ajax({
-		url: "getAddressForId.php",
+		url: "repos/getAddressForId.php",
 		type: "post",
 		dataType: "json",
 		data: {
@@ -71,7 +66,7 @@ $(document).ready(function() {
 		$('#successRemoveAddress').modal('hide');
 		var id = $('#rmAddressId').val();
 		$.ajax({
-			url: "removeAddress.php",
+			url: "repos/removeAddress.php",
 			type: "post",
 			data: {
 				"id": id
@@ -97,7 +92,7 @@ $(document).ready(function() {
 		var state = $('#editState').val();
 		var zipcode = $('#editZipCode').val();
 		$.ajax({
-			url: "editAddress.php",
+			url: "repos/editAddress.php",
 			type: "post",
 			data: {
 				"id": id,
@@ -131,7 +126,7 @@ $(document).ready(function() {
 		var state = $('#state').val();
 		var zipcode = $('#zipCode').val();
 		$.ajax({
-			url: "addAddress.php",
+			url: "repos/addAddress.php",
 			type: "post",
 			data: {
 				"address1": address1,
@@ -143,16 +138,19 @@ $(document).ready(function() {
 			success: function() {
 				$('#addAddressModal').modal('hide');
 				cleanAddModal();
-				window.parent.window.location.reload();
+				buildAddressTable();
 			}
 		});
 	});
 	
 	// setup table of address
 	
-	$.ajax({
-	
-		url: "getAllAddresses.php",
+	buildAddressTable();
+});
+
+function buildAddressTable() {
+	$.ajax({	
+		url: "repos/getAllAddresses.php",
 		dataType: "json",
 		type: "get",
 		success: function(data) {
@@ -171,8 +169,7 @@ $(document).ready(function() {
 					message += "</td></tr>\n";
 	 				$('#addresses').append(message);
 				});
-			}
-			
+			}		
 		}
 	});
-});
+}

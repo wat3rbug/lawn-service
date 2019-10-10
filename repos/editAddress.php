@@ -1,5 +1,5 @@
 <?php
-require "Address.php";
+require "Tables/Address.php";
 $id = $_POST['id'];
 $address1 = $_POST['address1'];
 $address2 = $_POST['address2'];
