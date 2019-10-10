@@ -10,6 +10,16 @@ function dashDateFromLong(currentDate) {
 	var day = currentDate.getDate();
 	return year + "-" + month + "-" + day;
 }
+
+function getWebDateFromDB(currentdate) {
+	var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+	var sections = currentdate.split('-');
+	var year = sections[0];
+	var day = sections[2];
+	var month = months[sections[1]]; 
+	return day + "-" + month + "-" + year;
+}
+
 function getWebDateFromDBDate(currentdate) {
 	var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 	currentDate = new Date(currentdate);

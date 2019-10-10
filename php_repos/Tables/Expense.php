@@ -23,6 +23,26 @@ class Expense {
 			throw new \PDOException($e->getMessage(), (int)$e->getCode());
 		}
 	}
+	
+	function removeExpense($id) {
+		if (isset($id) && $id > 0) {
+			$sql = "UPDATE expenses set isdeleted = 1 WHERE id = ?";
+			$statement = $this->conn->prepare($sql);
+			$statement->bindParam(1, $id);
+			$statement->execute();
+		}
+	}
+	function editExpense($id, $date, $name, $quantity, $unitcost, $category) {
+		$sql = "UPDATE expenses SET name = ?, unit_cost = ?, quantity = ?, expense_category = ?, expense_date = ? WHERE id = ?";
+		$statement = $this->conn->prepare($sql);
+		$statement->bindParam(1, $name);
+		$statement->bindParam(2, $unitcost);
+		$statement->bindParam(3, $quantity);
+		$statement->bindParam(4, $category);
+		$statement->bindParam(5, $date);
+		$statement->bindParam(6, $id);
+		$statement->execute();
+	}
 	function addExpense($date, $name, $quantity, $unitcost, $category) {
 		$sql = "INSERT INTO expenses (name, unit_cost, quantity, expense_category, expense_date) VALUES (?, ?, ?, ?, ?)";
 		$statement = $this->conn->prepare($sql);
