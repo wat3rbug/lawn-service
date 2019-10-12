@@ -1,5 +1,5 @@
 <?php
-require "Job.php";
+require_once "Tables/Job.php";
 $db = new Job();
 $data = $db->GetAllJobs();
 header('Content-type: application/json');

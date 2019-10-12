@@ -15,11 +15,14 @@
 	<!-- JQuery library -->
 	<script src="jquery-3.3.1.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+	
 	<script src="sidebar.js"></script>
-	<script src="thisweek.js"></script>
-	<script src="billing.js"></script>
+	<script src="js/jobs/jobs.js"></script>
+	<!-- <script src="billing.js"></script>
 	<script src="editjobs.js"></script>
-	<script src="addjob.js"></script>
+	<script src="addjob.js"></script> -->
 
 	
 	<div class="col-sm-12">
@@ -36,10 +39,10 @@
 			<div class="col-sm-2" id="sidebar">
 				
 			</div>
-			<div class="col-sm-9">
-				<p><h4>Jobs This Week</h4></p>			
+			<div class="col-sm-7">
+				<p><h4>Jobs</h4></p>			
 				<button type="button" class="btn btn-success" id="addJobBtn">
-					<span class="glyphicon glyphicon-plus"></span>&nbsp;Add Job
+					<span class="glyphicon glyphicon-plus"></span>&nbsp;New Job
 				</button>
 				<div class="row">&nbsp;</div>
 				<div class="panel panel-info">
@@ -55,6 +58,30 @@
 								<th scope="col">Action</th>								
 							</thead>
 							<tbody></tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="panel panel-info">
+					<div class="panel-heading text-center">Job Types</div>
+					<div class="panel-body">
+						<table class="table table-striped" id="jobTypeList">
+							<thead class="thead-light">
+								<th scope="col">Type</th>
+								<th scope="col">Materials</th>
+								<th scope="col">Action</th>
+							</thead>
+							<tbody>
+							</tbody>
+							<tfoot>
+								<tr>
+									<td colspan="3" class="text-right">
+										<button type='button' class='btn btn-success' id='showAddJobTypeModalBtn'>
+										<span class='glyphicon glyphicon-plus'></span>&nbsp;New Job Type</button>
+									</td>
+								</tr>
+							</tfoot>
 						</table>
 					</div>
 				</div>
@@ -517,6 +544,37 @@
 				</button>&nbsp;
 				<button type="button" class="btn btn-primary" id="editBillingCloseBtn">
 					<span class="glyphicon glyphicon-remove"></span>&nbsp;Close
+				</button>
+			</div>
+		</div>
+	</div>
+</div>			
+
+<!-- Add Job Type Modal -->
+
+<div class="modal fade" id="addJobTypeModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header d-block alert-success">
+				<h5 class="modal-title text-center">Add Job Type</h5>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-sm-6 text-right">Type</div>
+					<div class="col-sm-6"><input type="text" class="form-control" id="addJobTypeName"></div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class=row>
+					<div class="col-sm-6 text-right">Uses Materials</div>
+					<div class="col-sm-6"><input type="checkbox" id="addUseMaterials"></div>
+				</div>
+			</div>
+			<div class="modal-footer text-right">
+				<button type="button" class="btn btn-success" id="addJobTypeBtn">
+					<span class="glyphicon glyphicon-plus"></span>&nbsp;Job Type
+				</button>&nbsp;
+				<button type="button" class="btn btn-default" id="addJobTypeCancelBtn">
+					<span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Cancel
 				</button>
 			</div>
 		</div>

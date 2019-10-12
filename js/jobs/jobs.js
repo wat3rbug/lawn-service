@@ -1,15 +1,8 @@
-function buildTable() {
-	var start = new Date();
-	beginning= dashDateFromLong(start);
-	var end = dashDateFromLong(start.addDays(7));
+function buildJobTable() {
 	$.ajax({
-		url: "getAllJobsBetweenDates.php",
+		url: "repos/getAllJobs.php",
 		dataType: "json",
 		type: "get",
-		data: {
-			"beginning": beginning,
-			"end": end
-		},
 		success: function(result) {
 			if (result != null) {
 				$('#clients').find('tbody tr').remove();
@@ -46,23 +39,13 @@ function buildTable() {
 function removeJob(id) {
 
 	$.ajax({
-		url: "getJobDetailsForId.php",
-		dataType: "json",
+		url: "repos/removeJob.php",
 		type: "post",
 		data: {
 			"id": id
 		},
 		success: function(result) {
-			if (result != null) {
-				result.forEach(function (job) {
-					var jobDate = spaceDate(job.job_date);
-					var message = "Remove the job for " + job.firstName + " at ";
-					message += job.address1 + " on " + jobDate + ".";
-					$('#rmJobMsg').text(message);
-					$('#successRemoveJob').modal('show');
-					$('#rmJobId').val(id);
-				});
-			}
+			buildTable();
 		}	
 	});
 }
@@ -213,7 +196,7 @@ function getAllAddresses(selector) {
 
 $(document).ready(function() {
 	
-	buildTable();
+	buildJobTable();
 	
 	// Remove Job section
 	
@@ -248,4 +231,77 @@ $(document).ready(function() {
 			}
 		});
 	});
+	
+	buildJobTypeTable();
+	
+	// add job type section
+	
+	$('#showAddJobTypeModalBtn').on("click", function() {
+		$('#addJobTypeModal').modal('show');
+	});
+	
+	$('#addJobTypeCancelBtn').on("click", function() {
+		$('#addJobTypeModal').modal('hide');
+	});
+	
+	$('#addJobTypeBtn').on("click", function() {
+		addJobType();
+		clearAddJobTypeModal();
+		$('#addJobTypeModal').modal('hide');	
+	});
+	
 });
+
+function clearAddJobTypeModal() {
+	$('#addJobType').val();
+	$('#addUseMaterials').prop('checked', false);
+}
+
+function addJobType() {
+	var type = $('#addJobTypeName').val();
+	var useMaterial = $('#addUseMaterials').is(':checked') ? 0 : 1;
+	$.ajax({
+		url: "repos/addJobType.php",
+		type: "post",
+		data: {
+			"name": type,
+			"use": useMaterial
+		},
+		success: function() {
+			buildJobTypeTable();
+		}
+	});
+}
+
+function removeJobType(id) {
+	$.ajax({
+		url: "repos/removeJobType.php",
+		type: "post",
+		data: {
+			"id": id
+		},
+		success: function() {
+			buildJobTypeTable();
+		}
+	});
+}
+
+function buildJobTypeTable() {
+	$.ajax({
+		url: "repos/getAllTypes.php",
+		dataType: "json",
+		success: function(result) {
+			$('#jobTypeList').find('tbody tr').remove();
+			if (result != null) {
+				result.forEach(function(type) {
+					var row = "<tr><td>" + type.type + "</td><td class='text-right'><input type='checkbox' ";
+					row += "class='form-check-input'";
+					if (type.uses_material == "0") row +=" checked";
+					row += "/></td><td><button type='button' class='btn btn-outline-danger' onclick='removeJobType(";
+					row += type.id + ")'><span class='glyphicon glyphicon-remove'></span></button></td></tr>";
+					$('#jobTypeList').append(row);
+				});
+			}
+		}	
+	});
+}

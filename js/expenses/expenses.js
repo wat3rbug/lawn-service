@@ -34,8 +34,10 @@ $(document).ready(function() {
 	});
 	
 	$('#addExpenseDate').datepicker({
-		format: 'dd-m-yyyy', 
-		autoclose: true
+		format: 'd-m-yyyy', 
+		autoclose: true,
+		orientation: "top auto",
+		todayHighlight: true
 	});
 	
 	$('#pushExpenseDB').on("click", function() {
@@ -100,8 +102,10 @@ $(document).ready(function() {
 	});
 	
 	$('#editExpenseDate').datepicker({
-		format: 'dd-m-yyyy', 
-		autoclose: true
+		format: 'd-m-yyyy', 
+		autoclose: true,
+		orientation: "top auto",
+		todayHighlight: true
 	});
 });
 
@@ -205,8 +209,7 @@ function removeExpense(id) {
 			"id": id
 		},
 		success: function() {
-			//window.parent.window.location.reload();
-			buildExpenseTable();  //WTH is it doubling rows now!
+			buildExpenseTable();  
 		}
 	});
 }

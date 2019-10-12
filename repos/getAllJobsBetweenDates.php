@@ -1,5 +1,5 @@
 <?php
-require "Job.php";
+require "Tables/Job.php";
 $beginning = $_GET['beginning'];
 $end = $_GET['end'];
 

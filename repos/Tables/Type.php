@@ -41,11 +41,12 @@ class Type {
 		}
 	}
 	
-	function addJobType($type) {
-		if (isset($type)) {
-			$sql = "INSERT INTO types SET type= ?";
+	function addJobType($type, $use) {
+		if (isset($type) && isset($use) && $use >=0 && $use <= 1) {
+			$sql = "INSERT INTO types SET type= ?, uses_material = ?";
 			$statement = $this->conn->prepare($sql);
 			$statement->bindParam(1, $type);
+			$statement->bindParam(2, $use);
 			$statement->execute();
 		}
 	}
