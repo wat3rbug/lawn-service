@@ -72,6 +72,10 @@ class Job {
 			$statement = $this->conn->prepare($sql);
 			$statement->bindParam(1, $id);
 			$statement->execute();
+			$sql = "UPDATE billing set deleted = 1 WHERE job_id = ?";
+			$statement = $this->conn->prepare($sql);
+			$statement->bindParam(1, $id);
+			$statement->execute();
 		}
 	}
 	

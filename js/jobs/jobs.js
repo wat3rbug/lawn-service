@@ -33,7 +33,7 @@ function buildJobTable() {
 			}
 		}
 	});
-}
+} //used 
 
 
 function removeJob(id) {
@@ -45,19 +45,19 @@ function removeJob(id) {
 			"id": id
 		},
 		success: function(result) {
-			buildTable();
+			buildJobTable();
 		}	
 	});
-}
+} // used
 
 function complete(id) {
 	$.ajax({
-		url: "toggleJobComplete.php",
+		url: "repos/toggleJobComplete.php",
 		type: "post",
 		data: {
 			"id": id
 		}
-	})
+	});
 }
 Date.prototype.addDays = function(days) {
 	var date = new Date(this.valueOf());
@@ -197,14 +197,7 @@ function getAllAddresses(selector) {
 $(document).ready(function() {
 	
 	buildJobTable();
-	
-	// Remove Job section
-	
-	$('#rmSuccessCancelBtn').on("click", function() {
-		$('#rmJobMsg').text();
-		$('#rmJobId').val();
-		$('#successRemoveJob').modal('hide');
-	});
+	buildJobTypeTable();
 
 	// modal non-database buttons
 
@@ -214,25 +207,7 @@ $(document).ready(function() {
 	
 	$('#closeAddressInfoBtn').on("click", function() {
 		$('#showAddressInfoModal').modal('hide');	
-	});
-	
-	
-	
-	$('#rmSuccessBtn').on("click", function() {
-		var id = $('#rmJobId').val();
-		$.ajax({
-			url: "removeJob.php",
-			type: "post",
-			data: {
-				"id": id
-			}, 
-			success: function() {
-				window.parent.window.location.reload();
-			}
-		});
-	});
-	
-	buildJobTypeTable();
+	});	
 	
 	// add job type section
 	
