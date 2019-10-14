@@ -1,5 +1,5 @@
 <?php
-require "Billing.php";
+require "Tables/Billing.php";
 $id = $_POST['id'];
 
 if (isset($id) && $id > 0) {

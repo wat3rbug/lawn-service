@@ -20,9 +20,9 @@
 	
 	<script src="sidebar.js"></script>
 	<script src="js/jobs/jobs.js"></script>
-	<!-- <script src="billing.js"></script>
-	<script src="editjobs.js"></script>
-	<script src="addjob.js"></script> -->
+	<script src="js/jobs/billing.js"></script>
+	<script src="js/jobs/editjobs.js"></script>
+	<script src="addjob.js"></script>
 
 	
 	<div class="col-sm-12">
@@ -102,10 +102,10 @@
 				<input type="hidden" id="hdnEditJob">
 				<div class="row">
 					<div class="col-sm-6 text-right">Date</div>
-					<div class="col-sm-6">
+					<div class="col-sm-4">
 						<div class="input-group-prepend">								
 							<span class="input-group-text" id="editShowDate">
-								<span class="glyphicon glyphicon-calendar"></span>
+								<span class="glyphicon glyphicon-calendar" ></span>
 							</span>
 							<input type="text" class="form-control" id="editJobDate">
 						</div>
@@ -114,7 +114,7 @@
 				<div class="row">&nbsp;</div>
 				<div class="row">
 					<div class="col-sm-6 text-right">Cost</div>
-					<div class="col-sm-6">
+					<div class="col-sm-4">
 						<div class="input-group mb-3">
 							<div class="input-group-prepend">
 								<span class="input-group-text" id="editShowDollar">$</span>
@@ -135,7 +135,7 @@
 				<div class="row">
 					<div class="col-sm-6 text-right">Client</div>
 					<div class="col-sm-6">
-						<select class="browser-default custom-select" id="editClient">
+						<select class="browser-default custom-select" id="editClientSelector">
 						</select>
 					</div>
 				</div>

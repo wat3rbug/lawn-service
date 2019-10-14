@@ -10,7 +10,7 @@ function buildJobTable() {
 					var row = "<tr><td>" + spaceDate(job.job_date) + "</td><td>$";
 					var currentCost = parseFloat(job.cost).toFixed(2);
 					row += currentCost + "</td><td>";
-					if (job.type != "mow") {
+					if (job.uses_material != "1") {
 						row += "<button type='button' class='btn btn-outline-primary'"; 
 						row += " onclick='getBilling(" + job.id + ")'>" + job.type + "</button></td>";
 					} else {
@@ -58,7 +58,8 @@ function complete(id) {
 			"id": id
 		}
 	});
-}
+} // used
+
 Date.prototype.addDays = function(days) {
 	var date = new Date(this.valueOf());
 	date.setDate(date.getDate() + days);
@@ -99,29 +100,154 @@ function colonDate(input) {
 	return year + ":" + month + ":" + day;
 }
 
-function getAddressInfo(id) {
+
+function getAllTypes(selector) {
+	
 	$.ajax({
-		url: "getAddressForId.php",
+		url: "getAllTypes.php",
 		dataType: "json",
+		success: function (data) {
+			if (data != null) {
+				selector.empty();
+				data.forEach(function (type) {
+					selector.append($('<option>').text(type.type).val(type.id));
+				});
+			}
+		}	
+	});
+} // used
+
+function getAllClients(selector) {
+	$.ajax({
+		url: "getAllClients.php",
+		dataType: "json",
+		success: function (data) {
+			if (data != null) {
+				selector.empty();
+				data.forEach(function (client) {
+					var cname = client.firstName + " " + client.lastName;
+					selector.append($('<option>').text(cname).val(client.id));
+				});
+			}
+		}	
+	});	
+} // used
+
+function getAllAddresses(selector) {
+	$.ajax({
+		url: "getAllAddresses.php",
+		dataType: "json",
+		success: function (data) {
+			if (data != null) {
+				selector.empty();
+				data.forEach(function (address) {
+					selector.append($('<option>').text(address.address1).val(address.id));
+				});
+			}
+		}	
+	});
+} // used
+
+$(document).ready(function() {
+	
+	buildJobTable();
+	buildJobTypeTable();
+	
+	$('#editJobDate').datepicker({
+		format: 'd-m-yyyy', 
+		autoclose: true,
+		orientation: "top auto",
+		todayHighlight: true
+	});
+	
+	$('#addJobDate').datepicker({
+		format: 'd-m-yyyy', 
+		autoclose: true,
+		orientation: "top auto",
+		todayHighlight: true
+	});
+
+	$('#closeClientInfoBtn').on("click", function() {
+		$('#showClientInfoModal').modal('hide');	
+	});
+	
+	$('#closeAddressInfoBtn').on("click", function() {
+		$('#showAddressInfoModal').modal('hide');	
+	});	
+	
+	// job type section
+	
+	$('#showAddJobTypeModalBtn').on("click", function() {
+		$('#addJobTypeModal').modal('show');
+	});
+	
+	$('#addJobTypeCancelBtn').on("click", function() {
+		$('#addJobTypeModal').modal('hide');
+	});
+	
+	$('#addJobTypeBtn').on("click", function() {
+		addJobType();
+		clearAddJobTypeModal();
+		$('#addJobTypeModal').modal('hide');	
+	}); 
+});
+
+// Job Type functions
+
+function clearAddJobTypeModal() {
+	$('#addJobType').val();
+	$('#addUseMaterials').prop('checked', false);
+} 
+
+function addJobType() {
+	var type = $('#addJobTypeName').val();
+	var useMaterial = $('#addUseMaterials').is(':checked') ? 0 : 1;
+	$.ajax({
+		url: "repos/addJobType.php",
+		type: "post",
+		data: {
+			"name": type,
+			"use": useMaterial
+		},
+		success: function() {
+			buildJobTypeTable();
+		}
+	});
+} 
+
+function removeJobType(id) {
+	$.ajax({
+		url: "repos/removeJobType.php",
 		type: "post",
 		data: {
 			"id": id
 		},
+		success: function() {
+			buildJobTypeTable();
+		}
+	});
+} 
+
+function buildJobTypeTable() {
+	$.ajax({
+		url: "repos/getAllTypes.php",
+		dataType: "json",
 		success: function(result) {
+			$('#jobTypeList').find('tbody tr').remove();
 			if (result != null) {
-				result.forEach(function (address) {
-					$('#showAddressInfoModal').modal('show');
-					$('#addressHeading').text(address.address1);
-					$('#addressInfoAddresses').text(address.address1 + "\n" + address.address2);
-					$('#addressInfoCity').text(address.city);
-					$('#addressInfoState').text(address.state);
-					$('#addressInfoZip').text(address.zipcode);
+				result.forEach(function(type) {
+					var row = "<tr><td>" + type.type + "</td><td class='text-right'><input type='checkbox' ";
+					row += "class='form-check-input'";
+					if (type.uses_material == "0") row +=" checked";
+					row += "/></td><td><button type='button' class='btn btn-outline-danger' onclick='removeJobType(";
+					row += type.id + ")'><span class='glyphicon glyphicon-remove'></span></button></td></tr>";
+					$('#jobTypeList').append(row);
 				});
-				
 			}
 		}	
 	});
-}
+} 
+// view Client information
 
 function getClientInfo(id) {
 	$.ajax({
@@ -144,139 +270,30 @@ function getClientInfo(id) {
 			}
 		}	
 	});
-}
+} 
 
-function getAllTypes(selector) {
-	
+// view Address information
+
+function getAddressInfo(id) {
 	$.ajax({
-		url: "getAllTypes.php",
+		url: "repos/getAddressForId.php",
 		dataType: "json",
-		success: function (data) {
-			if (data != null) {
-				selector.empty();
-				data.forEach(function (type) {
-					selector.append($('<option>').text(type.type).val(type.id));
-				});
-			}
-		}	
-	});
-	
-}
-
-function getAllClients(selector) {
-	$.ajax({
-		url: "getAllClients.php",
-		dataType: "json",
-		success: function (data) {
-			if (data != null) {
-				selector.empty();
-				data.forEach(function (client) {
-					var cname = client.firstName + " " + client.lastName;
-					selector.append($('<option>').text(cname).val(client.id));
-				});
-			}
-		}	
-	});	
-}
-
-function getAllAddresses(selector) {
-	$.ajax({
-		url: "getAllAddresses.php",
-		dataType: "json",
-		success: function (data) {
-			if (data != null) {
-				selector.empty();
-				data.forEach(function (address) {
-					selector.append($('<option>').text(address.address1).val(address.id));
-				});
-			}
-		}	
-	});
-}
-
-$(document).ready(function() {
-	
-	buildJobTable();
-	buildJobTypeTable();
-
-	// modal non-database buttons
-
-	$('#closeClientInfoBtn').on("click", function() {
-		$('#showClientInfoModal').modal('hide');	
-	});
-	
-	$('#closeAddressInfoBtn').on("click", function() {
-		$('#showAddressInfoModal').modal('hide');	
-	});	
-	
-	// add job type section
-	
-	$('#showAddJobTypeModalBtn').on("click", function() {
-		$('#addJobTypeModal').modal('show');
-	});
-	
-	$('#addJobTypeCancelBtn').on("click", function() {
-		$('#addJobTypeModal').modal('hide');
-	});
-	
-	$('#addJobTypeBtn').on("click", function() {
-		addJobType();
-		clearAddJobTypeModal();
-		$('#addJobTypeModal').modal('hide');	
-	});
-	
-});
-
-function clearAddJobTypeModal() {
-	$('#addJobType').val();
-	$('#addUseMaterials').prop('checked', false);
-}
-
-function addJobType() {
-	var type = $('#addJobTypeName').val();
-	var useMaterial = $('#addUseMaterials').is(':checked') ? 0 : 1;
-	$.ajax({
-		url: "repos/addJobType.php",
-		type: "post",
-		data: {
-			"name": type,
-			"use": useMaterial
-		},
-		success: function() {
-			buildJobTypeTable();
-		}
-	});
-}
-
-function removeJobType(id) {
-	$.ajax({
-		url: "repos/removeJobType.php",
 		type: "post",
 		data: {
 			"id": id
 		},
-		success: function() {
-			buildJobTypeTable();
-		}
-	});
-}
-
-function buildJobTypeTable() {
-	$.ajax({
-		url: "repos/getAllTypes.php",
-		dataType: "json",
 		success: function(result) {
-			$('#jobTypeList').find('tbody tr').remove();
 			if (result != null) {
-				result.forEach(function(type) {
-					var row = "<tr><td>" + type.type + "</td><td class='text-right'><input type='checkbox' ";
-					row += "class='form-check-input'";
-					if (type.uses_material == "0") row +=" checked";
-					row += "/></td><td><button type='button' class='btn btn-outline-danger' onclick='removeJobType(";
-					row += type.id + ")'><span class='glyphicon glyphicon-remove'></span></button></td></tr>";
-					$('#jobTypeList').append(row);
+				result.forEach(function (address) {
+					$('#showAddressInfoModal').modal('show');
+					$('#addressHeading').text(address.address1);
+					$('#addressInfoAddresses').text(address.address1 + "\n" + address.address2);
+					$('#addressInfoCity').text(address.city);
+					$('#addressInfoState').text(address.state);
+					$('#addressInfoZip').text(address.zipcode);
 				});
+				
 			}
 		}	
 	});
-}
+} 

@@ -1,6 +1,9 @@
 function editJob(id) {
+	getAllTypes($('#editJobType'));
+	getAllClients($('#editClientSelector'));
+	getAllAddresses($('#editAddressSelector'));
 	$.ajax({
-		url: "getJobForId.php",
+		url: "repos/getJobForId.php",
 		dataType: "json",
 		type: "post",
 		data: {
@@ -8,18 +11,15 @@ function editJob(id) {
 		},
 		success: function(result) {
 			if (result != null) {
-				$('#editJobModal').modal('show');
-				getAllAddresses($('#editAddressSelector'));
-				getAllTypes($('#editJobType'));
-				getAllClients($('#editClient'));	
-				result.forEach(function(job) {
-					$('#hdnEditJob').val(job.id);
-					$('#editJobDate').val(job.job_date);
-					$('#editCost').val(parseFloat(job.cost).toFixed(2));
-					$('#editJobType').val(job.type_id);
-					$('#editClient').val(job.client_id);
-					$('#editAddress').val(job.address_id);
-				});
+				$('#editJobModal').modal('show');	
+				var job = result[0];
+				$('#hdnEditJob').val(job.id);
+				$('#editJobDate').val(job.job_date);
+				$('#editCost').val(parseFloat(job.cost).toFixed(2));
+				$('#editJobType').val(job.type_id);
+				$('#editClientSelector').val(job.client_id);
+				$('#editAddressSelector').val(job.address_id);
+				$('#editBillingBtn').prop('disabled', job.uses_material == "1" ? true : false);
 			}		
 		}
 	});
@@ -35,6 +35,7 @@ function clearEditModal() {
 
 $(document).ready(function () {
 	$('#cancelEditJobBtn').on("click", function() {
+		buildJobTable();
 		$('#editJobModal').modal('hide');
 	});
 

@@ -1,8 +1,8 @@
 <?php
-require "Job.php";
+require "Tables/Job.php";
 $id = $_POST['id'];
 $db = new Job();
-$data = $db->getJobForId($id);
+$data = $db->getJobDetailsForId($id);
 header('Content-type: application/json');
 echo json_encode($data);
 ?>

@@ -1,16 +1,16 @@
 function getBilling(id) {
 	$('#viewBillingModal').modal('show');
 	$.ajax({
-		url: "getBillingForId.php",
+		url: "repos/getBillingForId.php",
 		dataType: "json",
 		type: "post",
 		data: {
 			"id": id
 		},
 		success: function(data) {
-			if (data != null) {
-				var total = 0;			
-				$('#viewBillingItems').find('tbody tr').remove();
+			$('#viewBillingItems').find('tbody tr').remove();
+			var total = 0;	
+			if (data != null) {					
 				data.forEach(function(billing) {
 					var lineCost = parseFloat(billing.cost) * parseInt(billing.quantity);
 					total += lineCost;
@@ -21,8 +21,7 @@ function getBilling(id) {
 				});
 				var footer = "<tr><td class='text-left' colspan='3'><b>Total</b></td><td><b>$";
 				footer += parseFloat(total).toFixed(2) + "</b></td></tr>";
-				$('#viewBillingItems').append(footer);
-				
+				$('#viewBillingItems').append(footer);				
 			}
 		}	
 	});
@@ -111,11 +110,16 @@ function backToAddJobBillingModal() {
 
 $(document).ready(function() {
 	
-	// view Billing section
+	
+	// view billing
 	
 	$('#viewBillingCloseBtn').on("click", function() {
-		$('#addJobModal').modal("hide");	
+		$('#viewBillingModal').modal('hide');
 	});
+	
+	
+	
+	
 	
 	$('#cancelJobBtn').on("click", function() {
 		clearAddModal();
@@ -127,8 +131,7 @@ $(document).ready(function() {
 	$('#editBillingCloseBtn').on("click", function() {
 		var id = $('#editBillingJobId').val();
 		$('#editBillingModal').modal('hide');
-		$('#editJobModal').modal('show');
-		refreshEditBilling(id);
+		editJob(id);
 	});
 	
 	$('#addEditBillingItem').on("click", function() {
