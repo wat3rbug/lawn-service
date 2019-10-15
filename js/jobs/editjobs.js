@@ -60,7 +60,7 @@ $(document).ready(function () {
 			success: function() {
 				$('#editJobModal').modal('hide');
 				clearEditModal();
-				window.parent.window.location.reload();
+				buildJobTable();
 			}	
 		});
 	});

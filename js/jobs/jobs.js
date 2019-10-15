@@ -166,6 +166,7 @@ $(document).ready(function() {
 		orientation: "top auto",
 		todayHighlight: true
 	});
+	// info section
 
 	$('#closeClientInfoBtn').on("click", function() {
 		$('#showClientInfoModal').modal('hide');	
@@ -190,6 +191,13 @@ $(document).ready(function() {
 		clearAddJobTypeModal();
 		$('#addJobTypeModal').modal('hide');	
 	}); 
+	
+	// add job section
+	
+	$('#cancelJobBtn').on("click", function() {
+		clearAddModal();
+		$('#addJobModal').modal('hide');
+	});
 });
 
 // Job Type functions

@@ -117,15 +117,6 @@ $(document).ready(function() {
 		$('#viewBillingModal').modal('hide');
 	});
 	
-	
-	
-	
-	
-	$('#cancelJobBtn').on("click", function() {
-		clearAddModal();
-		$('#addJobModal').modal('hide');
-	});
-	
 	// edit Billing section	
 	
 	$('#editBillingCloseBtn').on("click", function() {

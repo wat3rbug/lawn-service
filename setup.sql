@@ -171,3 +171,11 @@ create trigger after_billing_insert
 	for each row 
 	update jobs set cost =(select sum(cost * quantity) from billing 
 		where deleted = 0  and billing.job_id = NEW.job_id) where jobs.id = NEW.job_id;
+		
+create view v_profit_loss as
+	select job_date as date, cost, types.type, addresses.address1 as name_or_location
+	from jobs join types on jobs.type_id = types.id
+	join addresses on jobs.address_id = addresses.id
+	union
+	select expense_date as date, (unit_cost * quantity * -1) as cost, expense_categories.expense_type, name  
+	from expenses join expense_categories on expenses.expense_category = expense_categories.id;
