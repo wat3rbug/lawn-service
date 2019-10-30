@@ -7,6 +7,8 @@ drop table if exists `addresses`;
 drop table if exists `states`;
 drop table if exists `expense_categories`;
 drop table if exists `expenses`;
+drop table if exists `machines`;
+drop table if exists `maintenance`;
 
 create table states (
 	postal_code varchar(2) primary key,
@@ -151,6 +153,22 @@ create table expenses (
 	foreign key fk_expense(expense_category) references expense_categories(id),
 	unit_cost decimal(10,2) not null,
 	quantity int not null default 1,
+	isDeleted tinyint(1) not null default 0
+) engine = InnoDB;
+
+create table machines (
+	id int auto_increment primary key,
+	name varchar(40) not null,
+	isDeleted tinyint(1) not null default 0
+) engine = InnoDB;
+
+create table maintenance (
+	id int auto_increment primary key,
+	machine_name int not null,
+	foreign key fk_machine(machine_name) references machines(id),
+	description varchar(100) not null,
+	duration_days int not null default 7,
+	last_checked date,
 	isDeleted tinyint(1) not null default 0
 ) engine = InnoDB;
 
