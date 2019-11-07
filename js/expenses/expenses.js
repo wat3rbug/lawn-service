@@ -95,8 +95,7 @@ $(document).ready(function() {
 			},
 			success: function() {
 				$('#editExpenseModal').modal('hide');
-				//window.parent.window.location.reload();
-				buildExpenseTable(); //its now doubling rows  WTF!
+				buildExpenseTable(); 
 			}
 		});		
 	});

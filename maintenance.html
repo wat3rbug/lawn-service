@@ -19,6 +19,7 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 	
 	<script src="sidebar.js"></script>
+	<script src="js/dbfunctions.js"></script>
 	<script src="js/maintenance/maintenance.js"></script>
 	
 	<div class="col-sm-12">
@@ -36,7 +37,8 @@
 				
 			</div>
 			<div class="col-sm-8">
-				<p><h4>Maintenance</h4></p>			
+				<p><h4>Maintenance</h4></p>	
+				<button type="button" class="btn btn-success" id="addCheckBtn"><span class="glyphicon glyphicon-plus"></span>&nbsp;Maintenance Check</button>		
 				<div class="row">&nbsp;</div>
 				<div class="panel panel-info">
 					<div class="panel-body">
@@ -99,4 +101,115 @@
 		</div>
 	</div>
 </body>
+
+<!-- Add Maintenance Check Item -->
+
+<div class="modal fade" id="addCheckModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header d-block alert-success">
+				<h5 class="modal-title text-center">Add Maintenance Check</h5>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-sm-6 text-right">Machine</div>
+					<div class="col-sm-6">
+						<select class="browser-default custom-select" id="addMachineSelector">
+						</select>
+					</div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class=row>
+					<div class="col-sm-6 text-right">Duration in Days</div>
+					<div class="col-sm-4">
+						<div class="input-group mb-3">
+							<input type="number" id="addDuration" class="form-control" placeholder="7">
+							<div class="input-group-append">
+								<span class="input-group-text" id="addDurationDisplay">#</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class=row>
+					<div class="col-sm-6 text-right">Description</div>
+					<div class="col-sm-6">
+						<textarea id="addDescription" class="md-textarea fom-control rounded-0" rows="3">
+						</textarea>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer text-right">
+				<button type="button" class="btn btn-success" id="addCheckCompleteBtn">
+					<span class="glyphicon glyphicon-cloud-upload"></span>&nbsp;Maintenance Check
+				</button>&nbsp;
+				<button type="button" class="btn btn-default" id="addCheckCancelBtn">
+					<span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Cancel
+				</button>
+			</div>
+		</div>
+	</div>
+</div>	
+
+<!-- Edit Maintenance Check Item --->	
+
+<div class="modal fade" id="editCheckModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header d-block alert-warning">
+				<h5 class="modal-title text-center">Edit Maintenance Check</h5>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-sm-6 text-right">Machine</div>
+					<div class="col-sm-6">
+						<select class="browser-default custom-select" id="editMachineSelector">
+						</select>
+					</div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<input type="hidden" id="hdnEditCheck">
+				<div class="row">
+					<div class="col-sm-6 text-right">Date</div>
+					<div class="col-sm-4">
+						<div class="input-group-prepend">								
+							<span class="input-group-text" id="editShowDate">
+								<span class="glyphicon glyphicon-calendar" ></span>
+							</span>
+							<input type="text" class="form-control" id="editDate">
+						</div>
+					</div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class=row>
+					<div class="col-sm-6 text-right">Duration in Days</div>
+					<div class="col-sm-4">
+						<div class="input-group mb-3">
+							<input type="number" id="editDuration" class="form-control" placeholder="7">
+							<div class="input-group-append">
+								<span class="input-group-text" id="addDurationDisplay">#</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">&nbsp;</div>
+				<div class=row>
+					<div class="col-sm-6 text-right">Description</div>
+					<div class="col-sm-6">
+						<textarea id="editDescription" class="md-textarea fom-control rounded-0" rows="3">
+						</textarea>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer text-right">
+				<button type="button" class="btn btn-warning" id="editCheckCompleteBtn">
+					<span class="glyphicon glyphicon-cloud-upload"></span>&nbsp;Maintenance Check
+				</button>&nbsp;
+				<button type="button" class="btn btn-default" id="editCheckCancelBtn">
+					<span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Cancel
+				</button>
+			</div>
+		</div>
+	</div>
+</div>	
 </html>

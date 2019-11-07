@@ -31,7 +31,7 @@ function getWebDateFromDBDate(currentdate) {
 }
 
 function getTodayForDB() {
-	var currentDate = Date.now();
+	var currentDate = new Date();
 	var year = currentDate.getFullYear();
 	var month = currentDate.getMonth() + 1;
 	var day =currentDate.getDate();
