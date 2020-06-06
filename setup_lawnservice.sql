@@ -1,14 +1,22 @@
+create database lawn_service;
 use lawn_service;
+
+drop trigger if exists `after_billing_insert`;
+drop trigger if exists `after_billing_update`;
+drop trigger if exists `after_billing_delete`;
+drop view if exists `v_profit_loss`;
+drop table if exists `maintenance`;
+drop table if exists `machines`;
+drop table if exists `expenses`;
+drop table if exists `expense_categories`;
 drop table if exists `mowers`;
+drop table if exists `billing`;
 drop table if exists `jobs`;
-drop table if exists `clients`;
 drop table if exists `types`;
+drop table if exists `clients`;
 drop table if exists `addresses`;
 drop table if exists `states`;
-drop table if exists `expense_categories`;
-drop table if exists `expenses`;
-drop table if exists `machines`;
-drop table if exists `maintenance`;
+
 
 create table states (
 	postal_code varchar(2) primary key,
@@ -169,6 +177,7 @@ create table maintenance (
 	description varchar(100) not null,
 	duration_days int not null default 7,
 	last_checked date,
+	next_check date,
 	isDeleted tinyint(1) not null default 0
 ) engine = InnoDB;
 
@@ -190,7 +199,7 @@ create trigger after_billing_insert
 	update jobs set cost =(select sum(cost * quantity) from billing 
 		where deleted = 0  and billing.job_id = NEW.job_id) where jobs.id = NEW.job_id;
 		
-create view v_profit_loss as
+create or replace view v_profit_loss as
 	select job_date as date, cost, types.type, addresses.address1 as name_or_location
 	from jobs join types on jobs.type_id = types.id
 	join addresses on jobs.address_id = addresses.id

@@ -52,7 +52,7 @@ function cleanAddModal() {
 }
 
 $(document).ready(function() {
-
+	
 	// Remove Address section
 	
 	$('#rmSuccessCancelBtn').on("click", function() {
